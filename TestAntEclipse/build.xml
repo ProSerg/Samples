@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="TestAnt" default="build" basedir="."> 
+	<property file="build.properties" > </property >	
+ 	<property name="main-class" value="ru.home.HelloWorld" /> 
+	
+	<path id="project.class.path">
+		<fileset dir="${src}/home/ru">
+			<include name="/*.class" />
+		</fileset>
+	</path>
+	
+	<target name="clean" >
+		<delete dir="${build.classes}" />
+		<delete dir="${build.jar}" />
+	</target >
+	
+	<target name="init" depends="clean">
+		<mkdir dir="${build.classes}"/>
+		<mkdir dir="${build.jar}"/>
+	</target >
+	
+	<target name="compile" depends="init">
+		<echo >Compiling now... </echo >
+		<javac destdir="${build.classes}" debug="true" srcdir="${src}" includeantruntime="true" >
+		</javac>
+		<echo >Compilation successful! </echo >
+	</target >
+		        	
+	<target name="build" depends="compile" >
+		<echo >Building now... </echo >
+	  		<jar destfile="${build.jar}/jcg.jar" basedir="${build.classes}">
+	  			<manifest>
+	  				<attribute name="Manifest-Version" value="1.0" />
+	  				<attribute name="Main-Class" value="${main-class}" />
+	  				<attribute name="Class-Path" value="." />
+	  			</manifest>
+	  		</jar>
+		<echo >Building successful!</echo >
+	</target>
+	
+</project>
