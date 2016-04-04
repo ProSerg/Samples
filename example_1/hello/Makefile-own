@@ -1,0 +1,40 @@
+CC=gcc
+
+CFLAGS=-MD $(compile_flags)
+
+TARGET=hello
+
+PREFIX=/usr/local/bin
+
+source_dirs := . src/functions src/foo
+
+source_dirs := $(addprefix ../,$(source_dirs))
+
+object_dir := ./obj/
+
+search_wildcards := $(addsuffix /*.c,$(source_dirs)) 
+
+objects :=  $(notdir $(patsubst %.c,%.o,$(wildcard $(search_wildcards))))
+
+.PHONY: $(TARGET) install uninstall clean help
+
+$(TARGET): $(objects)
+	$(CC) $^ -o $@ 
+
+VPATH := $(source_dirs)
+
+install:
+	install ./hello 
+uninstall:
+
+clean:
+	rm -rf ./*.o ./*.d
+	rm -rf ./$(TARGET)
+	rm -rf ./bin/*.d ./bin/*.o ./bin/$(TARGET)
+     
+%.o : %.c
+	@echo $<
+	@$(CC) $(CFLAGS) $(addprefix -I,$(source_dirs)) -c $< 
+
+
+include $(wildcard obj/*.d) 

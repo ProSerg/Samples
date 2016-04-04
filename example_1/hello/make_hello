@@ -1,0 +1,4 @@
+
+make    compile_flags="-O3" \
+          --directory=bin \
+          --makefile=../Makefile-own 
