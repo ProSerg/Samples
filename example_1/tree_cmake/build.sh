@@ -3,7 +3,7 @@
 dirs="libA libB libC libD libE libG libH"
 target=source
 
-rm -rf ./$target
+./clean.sh
 
 [ -d $target ] || mkdir $target
 
@@ -44,16 +44,13 @@ set(SOURCES
 )
  
 set(HEADERS
-\${PROJECT_SOURCE_DIR}/fun.h
+ fun.h
 )
 
 #include_directories("")
 #include_directories("")
 
-message (STATUS "PATH: " \${CMAKE_CURRENT_SOURCE_DIR} )
-message (STATUS "MAIN:PATH: " \${CMAKE_SOURCE_DIR} )
-message (STATUS "LIB: "  \${LIBRARY_OUTPUT_PATH} )
-message (STATUS "COMM: " \${CMAKE_COMMAND} )
+message (STATUS "CMAKE: " \${PROJECT_NAME} )
 
 add_library(\${PROJECT_NAME} SHARED \${SOURCES})
 
@@ -65,14 +62,32 @@ set_target_properties(\${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY \${CM
 ADD_CUSTOM_COMMAND(
 	  TARGET \${PROJECT_NAME}
           POST_BUILD
-
           COMMAND \${CMAKE_COMMAND} -E make_directory \${LICENSE_OUTPUT_PATH}/\${PROJECT_NAME}
           COMMAND \${CMAKE_COMMAND} -E make_directory \${LIBRARY_OUTPUT_PATH}/\${PROJECT_NAME}/bin 
           COMMAND \${CMAKE_COMMAND} -E make_directory \${LIBRARY_OUTPUT_PATH}/\${PROJECT_NAME}/lib 
           COMMAND \${CMAKE_COMMAND} -E make_directory \${LIBRARY_OUTPUT_PATH}/\${PROJECT_NAME}/include 
-          COMMAND \${CMAKE_COMMAND} -E copy \${CMAKE_CURRENT_SOURCE_DIR}/lib/lib\${PROJECT_NAME}.so \${LIBRARY_OUTPUT_PATH}/\${PROJECT_NAME}/lib/\${PROJECT_NAME}.so
+          COMMAND \${CMAKE_COMMAND} -E copy \${CMAKE_CURRENT_SOURCE_DIR}/lib/lib\${PROJECT_NAME}.so \${LIBRARY_OUTPUT_PATH}/\${PROJECT_NAME}/bin/\${PROJECT_NAME}.so
           COMMAND \${CMAKE_COMMAND} -E copy \${CMAKE_CURRENT_SOURCE_DIR}/LICENSE \${LICENSE_OUTPUT_PATH}/\${PROJECT_NAME}/LICENSE
+          COMMENT "POST BUILD"
 )
+
+
+#for foreach list<files>
+FOREACH(file_h \${HEADERS} )
+
+    ADD_CUSTOM_COMMAND(	
+   	TARGET \${PROJECT_NAME}
+   	POST_BUILD
+   	COMMAND \${CMAKE_COMMAND} -E copy \${PROJECT_SOURCE_DIR}/\${file_h}  \${LIBRARY_OUTPUT_PATH}/\${PROJECT_NAME}/include/\${file_h}
+	DEPENDS "\${file_h}" processor # depends on the 'processor'
+        COMMENT "copy \${file_h}"
+    )
+ENDFOREACH(file_h)
+
 EOF
 
-done 
+done
+
+echo "CMAKE && BUILD"
+cmake ./
+ 
