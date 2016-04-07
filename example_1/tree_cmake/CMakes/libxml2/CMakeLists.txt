@@ -1,0 +1,57 @@
+cmake_minimum_required(VERSION 2.8)
+project( libxml2 )
+
+
+message (STATUS "CMAKE ${PROJECT_NAME} " )
+
+set(XML2_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
+set(XML2_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib")
+set(XML2_LIB_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/libxml2/libxml")
+
+# это может заменить скрипт build.sh
+add_custom_target(${PROJECT_NAME} ALL
+	aclocal && autoconf && automake && ./configure --prefix=${CMAKE_CURRENT_SOURCE_DIR} && make && make install 
+#	COMMAND make install
+	WORKING_DIRECTORY ${XML2_SOURCE_DIR}
+)
+
+
+ADD_CUSTOM_COMMAND(
+	  TARGET ${PROJECT_NAME}
+          POST_BUILD
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} 
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin 
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib 
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include 
+          COMMENT "POST BUILD"
+)
+
+
+file(GLOB HEADERS "${XML2_LIB_INCLUDE_DIR}/*.h" )
+file(GLOB LIBS "${XML2_LIB_DIR}/${PROJECT_NAME}.s*" )
+
+#message(STATUS "${HEADERS}")
+
+set(LICENSES
+	${XML2_SOURCE_DIR}/Copyright
+)
+ 
+INSTALL (
+	FILES ${HEADERS} DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include
+)
+
+INSTALL (
+	FILES ${LIBS} DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin
+)
+
+INSTALL (
+	FILES ${LICENSES} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}	
+)
+
+#INSTALL (
+#	DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib  DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
+#       FILES_MATCHING PATTERN "${PROJECT_NAME}.s*"
+#	PATTERN "cmake" EXCLUDE
+#	PATTERN "pkgconfig" EXCLUDE
+#)
