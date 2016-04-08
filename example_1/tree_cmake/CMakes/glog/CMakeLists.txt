@@ -1,30 +1,22 @@
 cmake_minimum_required(VERSION 2.8)
-project( libxml2 )
+project( glog )
 message (STATUS "CMAKE ${PROJECT_NAME} " )
 
-set(TARGET libxml2)
-set(MAJOR 2)
-set(MINOR 9.3)
+set(TARGET libglog )
+set(MAJOR 0)
+set(MINOR 0.0)
 set(SUFFIX .so)
 
 set(PROJECT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/.libs")
-set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/libxml")
-
-
-#add_custom_target(${PROJECT_NAME} ALL
-#	aclocal && autoconf && automake && ./configure --prefix=${CMAKE_CURRENT_SOURCE_DIR} && make 
-#	COMMAND make install
-#	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-#)
+set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/src/windows/glog")
 
 add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX} )
-#add_custom_target(${PROJECT_NAME} ALL )
 
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
 #	TARGET ${PROJECT_NAME}
-	COMMAND ./autogen.sh && ./configure --prefix=${CMAKE_CURRENT_SOURCE_DIR} && make
+	COMMAND ./configure && make
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
@@ -42,8 +34,7 @@ ADD_CUSTOM_COMMAND(
 
 file(GLOB HEADERS "${PROJECT_LIB_INCLUDE_DIR}/*.h" )
 
-#message (STATUS "PATH: ${PROJECT_LIB_INCLUDE_DIR}" )
-#message (STATUS "H: ${HEADERS}" )
+message(STATUS "H:" ${HEADERS} )
 
 set(LIBS 
 	${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
@@ -52,7 +43,7 @@ set(LIBS
 )
 
 set(LICENSES
-	${PROJECT_SOURCE_DIR}/Copyright
+	${PROJECT_SOURCE_DIR}/COPYING
 )
  
 INSTALL (
@@ -67,9 +58,3 @@ INSTALL (
 	FILES ${LICENSES} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}	
 )
 
-#INSTALL (
-#	DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib  DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
-#       FILES_MATCHING PATTERN "${PROJECT_NAME}.s*"
-#	PATTERN "cmake" EXCLUDE
-#	PATTERN "pkgconfig" EXCLUDE
-#)

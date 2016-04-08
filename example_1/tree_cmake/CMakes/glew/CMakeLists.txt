@@ -1,15 +1,16 @@
 cmake_minimum_required(VERSION 2.8)
-project( libxml2 )
+project( glew )
 message (STATUS "CMAKE ${PROJECT_NAME} " )
 
-set(TARGET libxml2)
-set(MAJOR 2)
-set(MINOR 9.3)
+set(TARGET libGLEW )
+set(MAJOR 2.0)
+set(MINOR 0 )
 set(SUFFIX .so)
 
+
 set(PROJECT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/.libs")
-set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/libxml")
+set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/lib")
+set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/GL")
 
 
 #add_custom_target(${PROJECT_NAME} ALL
@@ -23,8 +24,8 @@ add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFF
 
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
-#	TARGET ${PROJECT_NAME}
-	COMMAND ./autogen.sh && ./configure --prefix=${CMAKE_CURRENT_SOURCE_DIR} && make
+	COMMAND cd ./auto && make
+	COMMAND make
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
@@ -52,7 +53,7 @@ set(LIBS
 )
 
 set(LICENSES
-	${PROJECT_SOURCE_DIR}/Copyright
+	${PROJECT_SOURCE_DIR}/LICENSE.txt
 )
  
 INSTALL (
