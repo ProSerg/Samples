@@ -1,24 +1,35 @@
 cmake_minimum_required(VERSION 2.8)
 project( libxml2 )
-
-
 message (STATUS "CMAKE ${PROJECT_NAME} " )
 
-set(XML2_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set(XML2_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib")
-set(XML2_LIB_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/libxml2/libxml")
+set(MAJOR 2)
+set(MINOR 9.3)
+set(SUFFIX .so)
 
-# это может заменить скрипт build.sh
-add_custom_target(${PROJECT_NAME} ALL
-	aclocal && autoconf && automake && ./configure --prefix=${CMAKE_CURRENT_SOURCE_DIR} && make && make install 
+set(XML2_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
+set(XML2_LIB_DIR "${XML2_SOURCE_DIR}/.libs")
+set(XML2_LIB_INCLUDE_DIR "${XML2_SOURCE_DIR}/include/libxml")
+
+
+#add_custom_target(${PROJECT_NAME} ALL
+#	aclocal && autoconf && automake && ./configure --prefix=${CMAKE_CURRENT_SOURCE_DIR} && make 
 #	COMMAND make install
+#	WORKING_DIRECTORY ${XML2_SOURCE_DIR}
+#)
+
+add_custom_target(${PROJECT_NAME} ALL DEPENDS ${XML2_LIB_DIR}/${PROJECT_NAME}${SUFFIX} )
+#add_custom_target(${PROJECT_NAME} ALL )
+
+ADD_CUSTOM_COMMAND(
+	OUTPUT ${XML2_LIB_DIR}/${PROJECT_NAME}${SUFFIX}
+#	TARGET ${PROJECT_NAME}
+	COMMAND aclocal && autoconf && automake && ./configure --prefix=${CMAKE_CURRENT_SOURCE_DIR} && make
 	WORKING_DIRECTORY ${XML2_SOURCE_DIR}
 )
 
-
 ADD_CUSTOM_COMMAND(
 	  TARGET ${PROJECT_NAME}
-          POST_BUILD
+	  POST_BUILD
           COMMAND ${CMAKE_COMMAND} -E make_directory ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
           COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} 
           COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin 
@@ -29,9 +40,15 @@ ADD_CUSTOM_COMMAND(
 
 
 file(GLOB HEADERS "${XML2_LIB_INCLUDE_DIR}/*.h" )
-file(GLOB LIBS "${XML2_LIB_DIR}/${PROJECT_NAME}.s*" )
 
-#message(STATUS "${HEADERS}")
+#message (STATUS "PATH: ${XML2_LIB_INCLUDE_DIR}" )
+#message (STATUS "H: ${HEADERS}" )
+
+set(LIBS 
+	${XML2_LIB_DIR}/${PROJECT_NAME}${SUFFIX}
+	${XML2_LIB_DIR}/${PROJECT_NAME}${SUFFIX}.${MAJOR}
+	${XML2_LIB_DIR}/${PROJECT_NAME}${SUFFIX}.${MAJOR}.${MINOR}
+)
 
 set(LICENSES
 	${XML2_SOURCE_DIR}/Copyright
