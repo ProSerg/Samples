@@ -66,3 +66,49 @@ if ! [ -d src ]; then
 fi
 cd -
 
+name=openssl
+echo "Build: $name"
+mkdir -p ./$name
+cd ./$name
+cp -r ./../../CMakes/$name/CMakeLists.txt ./
+if ! [ -d src ]; then
+	git clone git://git.openssl.org/openssl.git ./src
+fi
+cd -
+
+name=portaudio
+echo "Build: $name"
+mkdir -p ./$name
+cd ./$name
+cp -r ./../../CMakes/$name/CMakeLists.txt ./
+if ! [ -d src ]; then
+	svn co https://subversion.assembla.com/svn/portaudio/portaudio/trunk/ ./src
+fi
+cd -
+
+	
+name=sdl
+echo "Build: $name"
+mkdir -p ./$name
+cd ./$name
+cp -r ./../../CMakes/$name/CMakeLists.txt ./
+if ! [ -d src ]; then
+	#git clone "hg::http://hg.libsdl.org/SDL" ./src/
+	wget https://www.libsdl.org/release/SDL2-2.0.4.tar.gz
+	tar -zxf SDL2-2.0.4.tar.gz	
+	mv ./SDL2-2.0.4 ./src
+	rm -rf SDL2-2.0.4.tar.gz 
+fi
+cd -
+
+
+name=mongocxx
+echo "Build: $name"
+mkdir -p ./$name
+cd ./$name
+cp -r ./../../CMakes/$name/CMakeLists.txt ./
+if ! [ -d src ]; then
+	git clone -b legacy https://github.com/mongodb/mongo-cxx-driver.git ./src	
+fi
+
+

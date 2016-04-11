@@ -1,17 +1,25 @@
 cmake_minimum_required(VERSION 2.8)
-project( glog )
+project( portaudio )
 message (STATUS "CMAKE ${PROJECT_NAME} " )
 
-set(TARGET libglog )
-set(MAJOR 0)
-set(MINOR 0.0)
+set(TARGET libportaudio )
+set(MAJOR 1)
+set(MINOR 9)
 set(SUFFIX .so)
 
 set(PROJECT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/.libs")
-set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/src/windows/glog")
+set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/lib/.libs")
+set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/")
+
+
+#add_custom_target(${PROJECT_NAME} ALL
+#	aclocal && autoconf && automake && ./configure --prefix=${CMAKE_CURRENT_SOURCE_DIR} && make 
+#	COMMAND make install
+#	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+#)
 
 add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX} )
+#add_custom_target(${PROJECT_NAME} ALL )
 
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
@@ -34,16 +42,13 @@ ADD_CUSTOM_COMMAND(
 
 file(GLOB HEADERS "${PROJECT_LIB_INCLUDE_DIR}/*.h" )
 
-#message(STATUS "H:" ${HEADERS} )
 
 set(LIBS 
 	${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
-	${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}.${MAJOR}
-	${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}.${MAJOR}.${MINOR}
 )
 
 set(LICENSES
-	${PROJECT_SOURCE_DIR}/COPYING
+	${PROJECT_SOURCE_DIR}/LICENSE.txt
 )
  
 INSTALL (
