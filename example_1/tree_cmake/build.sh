@@ -110,5 +110,19 @@ cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
 	git clone -b legacy https://github.com/mongodb/mongo-cxx-driver.git ./src	
 fi
+cd -
 
+
+name=boost
+echo "Build: $name"
+mkdir -p ./$name
+cd ./$name
+cp -r ./../../CMakes/$name/CMakeLists.txt ./
+if ! [ -d src ]; then
+	git clone --recursive https://github.com/boostorg/boost.git ./src
+	cd ./src 
+	git checkout boost-1.60.0
+	git submodule update
+fi
+cd -
 
