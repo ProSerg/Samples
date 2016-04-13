@@ -93,7 +93,6 @@ mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
-	#git clone "hg::http://hg.libsdl.org/SDL" ./src/
 	wget https://www.libsdl.org/release/SDL2-2.0.4.tar.gz
 	tar -zxf SDL2-2.0.4.tar.gz	
 	mv ./SDL2-2.0.4 ./src
