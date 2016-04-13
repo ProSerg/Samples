@@ -72,7 +72,7 @@ mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
-	git clone git://git.openssl.org/openssl.git ./src
+	git clone https://git.openssl.org/openssl.git ./src
 fi
 cd -
 
