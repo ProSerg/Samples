@@ -41,15 +41,15 @@ cd -
 
 
 name=freeimage
-echo "Build: $name"
+version=3.18
+echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
-	wget http://downloads.sourceforge.net/freeimage/FreeImage3170.zip
-	unzip ./FreeImage3170.zip
+	echo "wget http://freeimage.cvs.sourceforge.net/viewvc/freeimage/FreeImage/?view=tar"
+	wget -qO- http://freeimage.cvs.sourceforge.net/viewvc/freeimage/FreeImage/?view=tar  | tar xz
 	mv ./FreeImage ./src
-	rm -rf FreeImage3170.zip 
 fi
 cd -
 
@@ -72,7 +72,8 @@ mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
-	git clone git://git.openssl.org/openssl.git ./src
+#	it clone https://git.openssl.org/openssl.git ./src
+	git clone https://github.com/openssl/openssl.git ./src
 fi
 cd -
 
@@ -108,6 +109,7 @@ cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
 	git clone -b legacy https://github.com/mongodb/mongo-cxx-driver.git ./src	
+	#git clone -b master https://github.com/mongodb/mongo-cxx-driver.git ./src	
 fi
 cd -
 
