@@ -4,7 +4,7 @@ message (STATUS "CMAKE ${PROJECT_NAME} " )
 
 set(TARGET libfreeimage )
 set(MAJOR 3)
-set(MINOR 17.0 )
+set(MINOR 18.0 )
 set(SUFFIX .so)
 
 set(PROJECT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
