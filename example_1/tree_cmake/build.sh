@@ -10,7 +10,8 @@ target=source
 cd $target
 
 name=libxml2
-echo "Build: $name"
+version=???
+echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
@@ -20,7 +21,8 @@ fi
 cd - 
 
 name=glew
-echo "Build: $name"
+version=???
+echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
@@ -30,7 +32,8 @@ fi
 cd -
 
 name=glog
-echo "Build: $name"
+version=???
+echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
@@ -54,7 +57,8 @@ fi
 cd -
 
 name=live555
-echo "Build: $name"
+version=???
+echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
@@ -67,18 +71,19 @@ fi
 cd -
 
 name=openssl
-echo "Build: $name"
+version=???
+echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
-#	it clone https://git.openssl.org/openssl.git ./src
 	git clone https://github.com/openssl/openssl.git ./src
 fi
 cd -
 
 name=portaudio
-echo "Build: $name"
+version=???
+echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
@@ -89,7 +94,8 @@ cd -
 
 	
 name=sdl
-echo "Build: $name"
+version=2.0.4
+echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
@@ -103,7 +109,8 @@ cd -
 
 
 name=mongocxx
-echo "Build: $name"
+version=???
+echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
@@ -115,7 +122,8 @@ cd -
 
 
 name=boost
-echo "Build: $name"
+version=1.60
+echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
