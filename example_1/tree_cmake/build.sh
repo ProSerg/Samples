@@ -1,6 +1,5 @@
 #!/bin/bash
 
-dirs="libxml2"
 target=source
 
 #./clean.sh
