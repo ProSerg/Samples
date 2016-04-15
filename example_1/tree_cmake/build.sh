@@ -9,7 +9,7 @@ target=source
 cd $target
 
 name=libxml2
-version=???
+version=2.4.16
 echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
@@ -20,7 +20,7 @@ fi
 cd - 
 
 name=glew
-version=???
+version=1.13.0
 echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
@@ -31,7 +31,7 @@ fi
 cd -
 
 name=glog
-version=???
+version=0.3.4
 echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
@@ -56,7 +56,7 @@ fi
 cd -
 
 name=live555
-version=???
+version=latest
 echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
@@ -70,7 +70,7 @@ fi
 cd -
 
 name=openssl
-version=???
+version=1.1.0
 echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
@@ -81,7 +81,7 @@ fi
 cd -
 
 name=portaudio
-version=???
+version=v19
 echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
@@ -108,7 +108,7 @@ cd -
 
 
 name=mongocxx
-version=???
+version=3.0.0
 echo "Build: $name $version"
 mkdir -p ./$name
 cd ./$name
