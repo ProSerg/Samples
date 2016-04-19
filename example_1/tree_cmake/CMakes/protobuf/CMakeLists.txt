@@ -1,0 +1,99 @@
+cmake_minimum_required(VERSION 2.8)
+project( protobuf )
+message (STATUS "CMAKE ${PROJECT_NAME} " )
+
+set(TARGET libprotobuf )
+set(MAJOR 1)
+set(MINOR 0)
+set(SUFFIX .a)
+
+set(PROJECT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
+set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/src/.libs")
+set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/")
+
+
+add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX} )
+
+
+ADD_CUSTOM_COMMAND(
+	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
+	COMMAND ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} && make 
+	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+)
+
+ADD_CUSTOM_COMMAND(
+	  TARGET ${PROJECT_NAME}
+	  POST_BUILD
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} 
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin 
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib 
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include 
+          COMMENT "POST BUILD"
+)
+
+
+set(
+	LICENSE ${PROJECT_SOURCE_DIR}/LICENSE 
+)
+INSTALL(
+        CODE
+        "EXECUTE_PROCESS (
+        COMMAND make install
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+        )
+        "
+)
+
+
+INSTALL(
+	 CODE 
+	 "FILE(GLOB_RECURSE HEADERS ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include/google/protobuf/* ) \n
+   	 FILE(INSTALL DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include 
+   	 TYPE FILE FILES \${HEADERS}
+   	 )"
+)
+
+INSTALL(
+        CODE
+        "EXECUTE_PROCESS (
+        COMMAND rm -rf ./google
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/include
+        )
+        "
+)
+
+INSTALL(
+	 CODE 
+         "
+	 FILE(GLOB_RECURSE LIBRS ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/*.so* ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/*.la   ) \n
+	 FILE(REMOVE \${LIBRS} )
+         "     
+)
+
+INSTALL(
+        CODE
+        "EXECUTE_PROCESS (
+        COMMAND rm -rf ./pkgconfig
+        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
+        )
+        "
+)
+ 
+INSTALL(
+        CODE
+        "
+	FILE(GLOB FILES ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin/*   )
+	EXECUTE_PROCESS (
+        COMMAND rm -rf \${FILES}
+        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin
+        )
+        "
+)
+ 
+
+INSTALL (
+	FILES ${LICENSE} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
+)
+
+
