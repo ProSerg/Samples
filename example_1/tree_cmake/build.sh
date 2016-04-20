@@ -179,3 +179,15 @@ if ! [ -d src ]; then
 fi
 cd $root/$target
 
+
+
+#name=
+#version=1.0
+#echo "Build: $name $version"
+#mkdir -p ./$name
+#cd ./$name
+#cp -r ./../../CMakes/$name/CMakeLists.txt ./
+#if ! [ -d src ]; then
+#        git clone https://github.com/google/protobuf.git ./src
+#fi
+#cd $root/$target

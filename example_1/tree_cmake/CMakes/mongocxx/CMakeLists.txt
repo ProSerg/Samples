@@ -63,18 +63,43 @@ INSTALL(
         "
 )
 
+INSTALL(
+        CODE
+        "EXECUTE_PROCESS (
+        COMMAND rm -rf ./bin
+        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
+        )
+        "
+)
+
+
+INSTALL(
+	 CODE 
+	 "FILE(GLOB_RECURSE LIBS ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/*.so ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/*.so* ) \n
+   	 FILE(INSTALL DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin
+   	 TYPE FILE FILES \${LIBS}
+   	 )"
+)
+
 
 INSTALL(
         CODE
         "EXECUTE_PROCESS (
-	COMMAND rm -rf ./bin
-        COMMAND mv ./lib ./bin
-        COMMAND mkdir -p ./lib
-        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} 
+	COMMAND rm -rf ./lib
+        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
         )
 	"
 )
 
+
+INSTALL(
+        CODE
+        "EXECUTE_PROCESS (
+        COMMAND mkdir -p lib
+        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
+        )
+        "
+)
 
 
 
