@@ -14,6 +14,8 @@ set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/libxml")
 
 add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}_system${SUFFIX} )
 
+message(STATUS "PATH: ${PROJECT_SOURCE_DIR}" )
+
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}_system${SUFFIX}
 	COMMAND ./bootstrap.sh && ./b2 headers && ./b2 link=shared variant=release --libdir=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin --includedir=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
