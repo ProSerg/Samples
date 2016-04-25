@@ -190,16 +190,25 @@ download_msg "$name $version"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
-#if ! [ -d src ]; then
+if ! [ -d src ]; then
 	git clone https://github.com/boostorg/boost.git ./src
 	cd ./src 
 	target=./libs
-	dirs=`find $target/* -maxdepth 0 -type d`
-	count=`find $target/* -maxdepth 0 -type d | wc -l`
+	
+	exc="compute dll hana metaparse"
+	dirs=`find $target/* -maxdepth 0 -type d `	
+
+	# исключаем директории из выборки 
+	for dir in $exc ;do
+        	dirs="${dirs/$target\/$dir/}"
+	done
+
+	dirs=`echo "$dirs" | awk '/./'`
+	count=`echo "$dirs" | wc -l`
 	i=1
 	
 	for dir in  $dirs ; do
-		echo "Submodule: $dir ($i/$count)"	
+		echo "Submodule: ($i/$count) $dir"	
    		git submodule --quiet update --init $dir
    		let "i = $i +1"
 	      	tput cuu1
@@ -208,7 +217,7 @@ cp -r ./../../CMakes/$name/CMakeLists.txt ./
 	git submodule --quiet update --init  
 	git checkout --quiet boost-1.60.0 
 	git submodule --quiet update 
-#fi
+fi
 cd $root/$target
 
 
@@ -315,6 +324,10 @@ cp -r ./../../CMakes/$name/CMakeLists.txt ./
 
 	if ! [ -d vorbis ]; then
 		git clone https://git.xiph.org/vorbis.git
+	fi
+	
+	if ! [ -d fribidi  ]; then
+		git clone https://github.com/behdad/fribidi.git 
 	fi
 cd $root/$target
 

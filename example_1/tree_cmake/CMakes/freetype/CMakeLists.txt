@@ -13,9 +13,11 @@ set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/")
 
 add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}.0 )
 
+
+
 ADD_CUSTOM_COMMAND(
-	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
-	COMMAND ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} && make 
+	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}.0
+	COMMAND ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} --enable-static --disable-shared  && make 
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
@@ -41,9 +43,26 @@ set(LIBS
 )
 
 set(LICENSES
-	${PROJECT_SOURCE_DIR}/COPYING
+	${PROJECT_SOURCE_DIR}/docs/LICENSE.TXT
 )
- 
+
+INSTALL(
+        CODE
+        "EXECUTE_PROCESS (
+        COMMAND make install
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+        )
+        "
+)
+
+INSTALL(
+        CODE
+        "EXECUTE_PROCESS (
+        COMMAND rm -rf ./share
+        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
+        )
+        "
+)
 
 INSTALL (
 	FILES ${LICENSES} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}	
