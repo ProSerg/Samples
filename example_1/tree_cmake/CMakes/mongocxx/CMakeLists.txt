@@ -36,6 +36,7 @@ ADD_CUSTOM_COMMAND(
 	  TARGET ${PROJECT_NAME}
 	  POST_BUILD
           COMMAND ${CMAKE_COMMAND} -E make_directory ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LICENSE_OUTPUT_PATH}/libbson
           COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} 
           COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin 
           COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib 
@@ -43,7 +44,16 @@ ADD_CUSTOM_COMMAND(
           COMMENT "POST BUILD"
 )
 
+set(
+        LICENSE_CXX 
+		${PROJECT_SOURCE_DIR}/LICENSE 
+)
 
+
+set(
+        LICENSE_C 
+		${CMAKE_CURRENT_SOURCE_DIR}/cdriver_src/COPYING
+)
 
 INSTALL(
         CODE
@@ -63,55 +73,66 @@ INSTALL(
         "
 )
 
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (
-        COMMAND rm -rf ./bin
-        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
-        )
-        "
+
+#INSTALL(
+#        CODE
+#        "EXECUTE_PROCESS (
+#        COMMAND rm -rf ./bin
+#        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
+#        )
+#        "
+#)
+
+
+#INSTALL(
+#	 CODE 
+#	 "FILE(GLOB_RECURSE LIBS ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/*.so ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/*.so* ) \n
+#   	 FILE(INSTALL DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin
+#   	 TYPE FILE FILES \${LIBS}
+#   	 )"
+#)
+
+
+#INSTALL(
+#        CODE
+#        "EXECUTE_PROCESS (
+#	COMMAND rm -rf ./lib
+#        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
+#        )
+#	"
+#)
+
+
+#INSTALL(
+#        CODE
+#        "EXECUTE_PROCESS (
+#        COMMAND mkdir -p lib
+#        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
+#        )
+#        "
+#)
+
+
+
+#INSTALL(
+#        CODE
+#        "EXECUTE_PROCESS (	
+#	COMMAND mkdir -p ${LICENSE_OUTPUT_PATH}/libson
+#	COMMAND cp -r ./share/doc/libbson/COPYING ${LICENSE_OUTPUT_PATH}/libson/ 
+#	COMMAND cp -r ./share/doc/mongo-c-driver/COPYING ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
+#	COMMAND rm -rf ./share
+#	COMMAND echo \"A\"
+#        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} 
+#        )
+#	"
+#)
+
+
+INSTALL (
+        FILES ${LICENSE_CXX} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
 )
 
-
-INSTALL(
-	 CODE 
-	 "FILE(GLOB_RECURSE LIBS ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/*.so ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/*.so* ) \n
-   	 FILE(INSTALL DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin
-   	 TYPE FILE FILES \${LIBS}
-   	 )"
+INSTALL (
+        FILES ${LICENSE_C} DESTINATION ${LICENSE_OUTPUT_PATH}/libson
 )
 
-
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (
-	COMMAND rm -rf ./lib
-        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
-        )
-	"
-)
-
-
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (
-        COMMAND mkdir -p lib
-        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
-        )
-        "
-)
-
-
-
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (	
-	COMMAND mkdir -p ${LICENSE_OUTPUT_PATH}/libson
-	COMMAND cp -r ./share/doc/libbson/COPYING ${LICENSE_OUTPUT_PATH}/libson/ 
-	COMMAND cp -r ./share/doc/mongo-c-driver/COPYING ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
-	COMMAND rm -rf ./share
-	COMMAND echo \"A\"
-        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} 
-        )
-	"
-)

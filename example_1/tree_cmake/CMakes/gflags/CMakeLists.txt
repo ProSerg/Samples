@@ -1,23 +1,24 @@
 cmake_minimum_required(VERSION 2.8)
-project( freetype )
+project( gflags )
 message (STATUS "CMAKE ${PROJECT_NAME} " )
 
-set(TARGET libfreetype )
-set(MAJOR 2)
-set(MINOR 6.3)
+set(TARGET libgflags )
+set(MAJOR 1)
+set(MINOR 0)
 set(SUFFIX .a)
 
 set(PROJECT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/objs/.libs")
+set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/build/lib")
 set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/")
+
 
 add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX} )
 
 
-
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
-	COMMAND ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} --enable-static --disable-shared  && make 
+	COMMAND mkdir -p ./build
+	COMMAND cd ./build && CXXFLAGS="-fPIC" cmake -DCMAKE_INSTALL_PREFIX=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} -DBUILD_STATIC_LIBS=ON .. && make 
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
@@ -33,38 +34,22 @@ ADD_CUSTOM_COMMAND(
 )
 
 
-file(GLOB HEADERS "${PROJECT_LIB_INCLUDE_DIR}/*.h" )
-
-
-set(LIBS 
-	${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
-	${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}.${MAJOR}
-	${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}.${MAJOR}.${MINOR}
-)
-
-set(LICENSES
-	${PROJECT_SOURCE_DIR}/docs/LICENSE.TXT
+set(
+	LICENSE ${PROJECT_SOURCE_DIR}/COPYING.txt 
 )
 
 INSTALL(
         CODE
         "EXECUTE_PROCESS (
         COMMAND make install
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/build
         )
         "
 )
 
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (
-        COMMAND rm -rf ./share
-        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
-        )
-        "
-)
 
 INSTALL (
-	FILES ${LICENSES} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}	
+	FILES ${LICENSE} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
 )
+
 

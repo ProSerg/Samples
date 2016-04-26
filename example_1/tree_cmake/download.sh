@@ -69,6 +69,19 @@ if ! [ -d src ]; then
 fi
 cd $root/$target
 
+
+name=gflags
+vesrion=2.1.2
+download_msg "$name $version"
+mkdir -p ./$name
+cd ./$name
+cp -r ./../../CMakes/$name/CMakeLists.txt ./
+if ! [ -d src ]; then
+	git clone https://github.com/gflags/gflags.git ./src
+fi
+cd $root/$target
+
+
 name=glog
 version=0.3.4
 download_msg "$name $version"

@@ -3,6 +3,10 @@ cmake_minimum_required (VERSION 2.8)
 set (PROJECT hello) 
 set (TARGET libs)
 set (LICENSE license)
+set (SOURCE source)
+set (CMAKE source)
+
+#cmake_policy(SET CMP0009 NEW)
  
 project (${PROJECT}) 
 
@@ -39,16 +43,22 @@ ENDMACRO()
 
 SUBDIRLIST(SUBDIRS ${CMAKE_SOURCE_DIR}/source )
 
+set( LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${TARGET})
+set( LICENSE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${LICENSE})
+
 #message( STATUS "CURDIR: " ${CMAKE_SOURCE_DIR}  )
 #message( STATUS "SUBDIRS: " ${SUBDIRS} )
+#message( STATUS "LIBS: " ${LIBRARY_OUTPUT_PATH} )
 
-set( LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${TARGET})
-set( LICENSE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${LICENSE})
+if (DEFINED LIBS )
+	set (SUBDIRS ${LIBS}  )
+endif( )
+ 
 
 FOREACH(dir ${SUBDIRS})
 	file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/${TARGET} )
 	message( STATUS "BUILD: " ${CMAKE_SOURCE_DIR}/source/${dir}  )
-	add_subdirectory( ${CMAKE_SOURCE_DIR}/source/${dir} )
+	add_subdirectory( ${CMAKE_SOURCE_DIR}/${CMAKE}/${dir}  ${CMAKE_SOURCE_DIR}/${CMAKE}/${dir}/build )
 ENDFOREACH()
 
 
