@@ -17,7 +17,7 @@ add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFF
 
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
-	COMMAND ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} && make 
+	COMMAND ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} --disable-shared  && make 
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
@@ -46,50 +46,50 @@ INSTALL(
 )
 
 
-INSTALL(
-	 CODE 
-	 "FILE(GLOB_RECURSE HEADERS ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include/google/protobuf/* ) \n
-   	 FILE(INSTALL DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include 
-   	 TYPE FILE FILES \${HEADERS}
-   	 )"
-)
+#INSTALL(
+#	 CODE 
+#	 "FILE(GLOB_RECURSE HEADERS ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include/google/protobuf/* ) \n
+#  	 FILE(INSTALL DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include 
+#   	 TYPE FILE FILES \${HEADERS}
+#  	 )"
+#)
 
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (
-        COMMAND rm -rf ./google
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/include
-        )
-        "
-)
+#INSTALL(
+#        CODE
+#        "EXECUTE_PROCESS (
+#        COMMAND rm -rf ./google
+#        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/include
+#        )
+#        "
+#)
 
-INSTALL(
-	 CODE 
-         "
-	 FILE(GLOB_RECURSE LIBRS ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/*.so* ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/*.la   ) \n
-	 FILE(REMOVE \${LIBRS} )
-         "     
-)
+#INSTALL(
+#	 CODE 
+#         "
+#	 FILE(GLOB_RECURSE LIBRS ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/*.so* ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/*.la   ) \n
+#	 FILE(REMOVE \${LIBRS} )
+#         "     
+#)
 
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (
-        COMMAND rm -rf ./pkgconfig
-        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
-        )
-        "
-)
+#INSTALL(
+#        CODE
+#        "EXECUTE_PROCESS (
+#        COMMAND rm -rf ./pkgconfig
+#        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
+#        )
+#        "
+#)
  
-INSTALL(
-        CODE
-        "
-	FILE(GLOB FILES ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin/*   )
-	EXECUTE_PROCESS (
-        COMMAND rm -rf \${FILES}
-        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin
-        )
-        "
-)
+#INSTALL(
+#        CODE
+#        "
+#	FILE(GLOB FILES ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin/*   )
+#	EXECUTE_PROCESS (
+#        COMMAND rm -rf \${FILES}
+#        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin
+#        )
+#        "
+#)
  
 
 INSTALL (

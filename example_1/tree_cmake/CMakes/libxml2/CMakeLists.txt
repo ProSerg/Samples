@@ -16,7 +16,7 @@ add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFF
 
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
-	COMMAND ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} && make
+	COMMAND ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} --disable-static --with-python-install-dir=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin  && make
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
@@ -41,7 +41,7 @@ set(LIBS
 	${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}.${MAJOR}.${MINOR}
 )
 
-set(LICENSES
+set(LICENSE
 	${PROJECT_SOURCE_DIR}/Copyright
 )
 

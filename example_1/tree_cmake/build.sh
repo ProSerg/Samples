@@ -2,10 +2,13 @@
 
 target=./source
 dirs=""
-MOD_MAKE_ALL="all" # if wont the target use "make"
-MOD_MAKE="make"
-MOD_INSTALL="install"
-MOD_CLEAN="clean"
+ON="#"
+OFF=""
+MOD_MAKE_ALL=$ON # if want the target use "make"
+MOD_MAKE=$OFF
+MOD_INSTALL=$OFF
+MOD_CLEAN=$OFF
+dir=""
 CMOD=""
 
 error () {
@@ -20,21 +23,20 @@ getDirs() {
 }
 
 checkTarget() {
-	
 	for dir in $dirs; do
 		if [ $1 == $dir  ]; then
-			make_dir $dir
-			exit 0
+			MOD_MAKE_ALL=$OFF
+			MOD_MAKE=$dir
+			break
 		fi
 	done
-	
 }
 
 make_install() {
 [ -d ./CBin ] || error "can not find make file"
 	cd ./CBin
 	make install
-
+	cd ..
 }
 
 printList() {
@@ -50,7 +52,7 @@ make_all() {
 	cd ./CBin
 	cmake -ULIBS  ..
 	make
-
+	cd ..
 }
 
 make_dir() {
@@ -58,29 +60,29 @@ make_dir() {
 	cd ./CBin
 	cmake -DLIBS="$1" ..
 	make
+	cd ..
 }
 
 make_clean() {
 [ -d ./CBin ] || mkdir -p ./CBin
         cd ./CBin
         make clean
+	cd ..
 
 }
 
 build() {
-	case "$1" in
-	"$MOD_MAKE_ALL" )
+	if ! [ -z $MOD_MAKE_ALL ]; then
 		make_all
-		;;
-	"$MOD_MAKE" )
-		make_dir $2
-		;;
-	"$MOD_INSTALL")
-		make_install
-		;;
-	esac
+	fi
 	
-
+	if ! [ -z $MOD_MAKE ]; then
+		make_dir $MOD_MAKE
+	fi
+		
+	if ! [ -z $MOD_INSTALL ]; then
+		make_install
+	fi
 }
 
 
@@ -101,11 +103,11 @@ while [ "$1" != "" ]; do
 			exit 0			
 			;;
 		-i | --install )
-			make_install
-			exit 0
+			#make_install
+			MOD_INSTALL=$ON
 			;;
-		-c | --clean)
-			make_clean
+		-c | --clean )
+			#make_clean
 			exit 0
 			;;
 		*)
@@ -117,12 +119,6 @@ done
 
 }
 
-if [ $# -eq 0 ]; then
-	make_all
-	exit 0
-fi
-
 getDirs
 checkKeys $@
-
-echo "no  target"
+build
