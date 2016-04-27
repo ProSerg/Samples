@@ -30,6 +30,10 @@ checkTarget() {
 			break
 		fi
 	done
+	if [ "$MOD_MAKE" == "$OFF" ]; then 
+		echo "no target $1"
+		exit -1
+	fi
 }
 
 make_install() {
@@ -103,12 +107,12 @@ while [ "$1" != "" ]; do
 			exit 0			
 			;;
 		-i | --install )
-			#make_install
 			MOD_INSTALL=$ON
 			;;
 		-c | --clean )
-			#make_clean
 			exit 0
+			;;
+		--) 
 			;;
 		*)
 			checkTarget $1
