@@ -290,6 +290,8 @@ download_msg "$name $version"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
+cp -r -v  ./../../CMakes/$name/install.sh ./
+cp -r -v  ./../../CMakes/$name/make.sh ./
 	mkdir -p src
 	mkdir -p build
 	cd ./src
@@ -342,6 +344,7 @@ cp -r ./../../CMakes/$name/CMakeLists.txt ./
 	if ! [ -d fribidi  ]; then
 		git clone https://github.com/behdad/fribidi.git 
 	fi
+
 cd $root/$target
 
 

@@ -89,6 +89,9 @@ build() {
 	fi
 }
 
+usage() {
+	echo "FIXME :)"
+}
 
 checkKeys() {
 

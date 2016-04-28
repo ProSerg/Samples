@@ -45,16 +45,6 @@ set(LICENSE
 	${PROJECT_SOURCE_DIR}/Copyright
 )
 
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (
-        COMMAND make install
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-        )
-        "
-)
-
-
 INSTALL (
         FILES ${LICENSE} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
 )

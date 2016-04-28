@@ -23,8 +23,8 @@ set(LIB_YASM ${PROJECT_SOURCE_DIR}/${TARGET_YASM}/libyasm.a)
 set(TARGET_FRIBIDI fribidi )
 set(LIB_FRIBIDI ${PROJECT_SOURCE_DIR}/${TARGET_FRIBIDI}/lib/.libs/libfribidi.so )
 
-set(TARGET_X264 x264 )
-set(LIB_X264 ${PROJECT_SOURCE_DIR}/${TARGET_X264}/libx264.so )
+set(TARGET_FFMPEG ffmpeg )
+set(LIB_FFMPEG ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/ffmpeg.so ) #FIXME ???
 
 
 
@@ -32,7 +32,7 @@ set(LIB_X264 ${PROJECT_SOURCE_DIR}/${TARGET_X264}/libx264.so )
 add_custom_target(${PROJECT_NAME} ALL DEPENDS  
 	${LIB_YASM}
 	${LIB_FRIBIDI}
-#	${LIB_X264}
+	${LIB_FFMPEG}
 	)
 
 ADD_CUSTOM_COMMAND(
@@ -50,13 +50,12 @@ ADD_CUSTOM_COMMAND(
 	COMMENT "FRIBIDI-LIB"
 )
 
-#ADD_CUSTOM_COMMAND(
-#	OUTPUT  ${LIB_X264}
-	#COMMAND export PKG_CONFIG_PATH="${LD}/lib/pkgconfig" && export PKG_CONFIG_LIBDIR="${LD}/lib/pkgconfig" && echo "$PKG_CONFIG_LIBDIR" && ./configure --prefix="${LD}" --bindir="${LD}/bin" --enable-static && make 
-#	COMMAND ./configure
-#	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/${TARGET_X264}
-#	COMMENT "X264-LIB"
-#)
+ADD_CUSTOM_COMMAND(
+	OUTPUT  ${LIB_FFMPEG}
+	COMMAND export CXXFLAGS="-fPIC" && ./make.sh --lib_dir="${LIBRARY_OUTPUT_PATH}"
+	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+	COMMENT "FFMPEG-LIB"
+)
 
 ADD_CUSTOM_COMMAND(
 	  TARGET ${PROJECT_NAME}
@@ -69,12 +68,21 @@ ADD_CUSTOM_COMMAND(
           COMMENT "${PROJECT_NAME} BUILD"
 )
 
-#INSTALL(
-#        CODE
-#        "EXECUTE_PROCESS (
-#        COMMAND make install
-#        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cdriver_src/
-#        )
-#        "
-#)
+INSTALL(
+        CODE
+        "EXECUTE_PROCESS (
+        COMMAND ./install.sh
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+        "
+)
+
+INSTALL(
+        CODE
+        "EXECUTE_PROCESS (
+        COMMAND make install
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/${TARGET_FRIBIDI}
+        )
+        "
+)
 
