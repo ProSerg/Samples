@@ -22,6 +22,8 @@ settings () {
 	PKG_CONFIG_LIBDIR="$LD/lib/pkgconfig"  
 
 	logdir=$curdir/../log
+	export CFLAGS="$CFLAGS -fPIC"  
+	export CXXFLAGS="$CXXFLAGS -fPIC"	
 }
 
 usage() {
@@ -79,7 +81,11 @@ echo ""
 cd $SDIR/fribidi
  ./bootstrap 
  ./configure --prefix="$LD"
-error "Config" $?
+ if [ $? -ne 0  ]; then
+ 	./bootstrap
+ 	./configure --prefix="$LD"
+	error "Config" $?
+ fi
 make 
 make install 
 
@@ -94,11 +100,12 @@ echo "#### LIB x264 ####"
 echo ""
 
  cd $SDIR/x264
-# if [  ]; then 
-	 ./configure --prefix="$LD" --bindir="$LD/bin" --enable-static
-	 error "Config" $?
-	 make
-# fi
+ ./configure --prefix="$LD" --bindir="$LD/bin" 
+  if [ $? -ne 0  ]; then
+	./configure --prefix="$LD" --bindir="$LD/bin" 
+	error "Config" $?
+ fi
+ make
  make install
  cd $curdir
 }
@@ -110,7 +117,7 @@ echo "#### LIB x265 ####"
 echo ""
 
  cd $SDIR/x265/build/linux
- cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$LD" -DENABLE_SHARED:bool=off ../../source
+ cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$LD"  ../../source
  error "Config" $?
  make
  make install
@@ -125,8 +132,12 @@ echo ""
 
  cd $SDIR/vorbis
  ./autogen.sh
- ./configure --prefix="$LD" --disable-shared
- error "Config" $?
+ ./configure --prefix="$LD" 
+ if [ $? -ne 0  ]; then
+	./autogen.sh
+ 	./configure --prefix="$LD" 
+	error "Config" $?
+ fi
  make
  make install
  cd $curdir
@@ -141,8 +152,12 @@ echo ""
 
  cd $SDIR/libass
  ./autogen.sh
-PKG_CONFIG_PATH="$LD/lib/pkgconfig" ./configure --prefix="$LD" --disable-shared 
- error "Config" $?
+ PKG_CONFIG_PATH="$LD/lib/pkgconfig" ./configure --prefix="$LD"
+  if [ $? -ne 0  ]; then
+	./autogen.sh
+	PKG_CONFIG_PATH="$LD/lib/pkgconfig" ./configure --prefix="$LD"
+	error "Config" $?
+ fi
  make
  make install
  cd $curdir
@@ -188,8 +203,12 @@ echo ""
 
  cd $SDIR/theora
  ./autogen.sh
- ./configure --prefix=$LD --disable-shared
- error "Config" $?
+ ./configure --prefix=$LD 
+ if [ $? -ne 0  ]; then
+	./autogen.sh
+ 	./configure --prefix=$LD 
+	error "Config" $?
+ fi
  make
  make install
  cd $curdir
@@ -234,8 +253,8 @@ PKG_CONFIG_PATH="$LD/lib/pkgconfig" ./configure \
 settings
 checkKeys $@
 
-#build_yasm
-#build_fribidi
+build_yasm
+build_fribidi
 build_x264
 build_x265
 build_vorbis

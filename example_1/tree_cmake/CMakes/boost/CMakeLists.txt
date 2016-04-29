@@ -58,40 +58,40 @@ INSTALL(
 	"
 )
 
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (
-        COMMAND rm -rf ./include
-        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} 
-        )
-        "
-)
+#INSTALL(
+#        CODE
+#        "EXECUTE_PROCESS (
+#        COMMAND rm -rf ./include
+#        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} 
+#        )
+#        "
+#)
 
 
-INSTALL(
-	CODE
-  	"EXECUTE_PROCESS (
-	COMMAND mv ./boost ./include
-	WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} 
-	)
-	"
-)
+#INSTALL(
+#	CODE
+#  	"EXECUTE_PROCESS (
+#	COMMAND mv ./boost ./include
+#	WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} 
+#	)
+#	"
+#)
 
 
 
-INSTALL(
-	CODE
-	"EXECUTE_PROCESS (
-	COMMAND rm -rf ./${PROJECT_NAME}/bin/libboost_chrono.a 
-	COMMAND rm -rf ./${PROJECT_NAME}/bin/libboost_exception.a 
-	COMMAND rm -rf ./${PROJECT_NAME}/bin/libboost_system.a 
-	COMMAND rm -rf ./${PROJECT_NAME}/bin/libboost_test_exec_monitor.a
-	COMMAND rm -rf ./${PROJECT_NAME}/bin/libboost_timer.a 
-	COMMAND rm -rf ./${PROJECT_NAME}/bin/libboost_unit_test_framework.a
-	WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH} 
-	)
-	"
-)
+#INSTALL(
+#	CODE
+#	"EXECUTE_PROCESS (
+#	COMMAND rm -rf ./${PROJECT_NAME}/bin/libboost_chrono.a 
+#	COMMAND rm -rf ./${PROJECT_NAME}/bin/libboost_exception.a 
+#	COMMAND rm -rf ./${PROJECT_NAME}/bin/libboost_system.a 
+#	COMMAND rm -rf ./${PROJECT_NAME}/bin/libboost_test_exec_monitor.a
+#	COMMAND rm -rf ./${PROJECT_NAME}/bin/libboost_timer.a 
+#	COMMAND rm -rf ./${PROJECT_NAME}/bin/libboost_unit_test_framework.a
+#	WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH} 
+#	)
+#	"
+#)
 
 INSTALL (
 	FILES ${LICENSES} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}	

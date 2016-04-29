@@ -326,7 +326,12 @@ cp -r -v  ./../../CMakes/$name/make.sh ./
         fi
 
 	if ! [ -d x265 ]; then
-		hg clone https://bitbucket.org/multicoreware/x265
+		#hg clone https://bitbucket.org/multicoreware/x265
+		wget https://bitbucket.org/multicoreware/x265/downloads/x265_1.9.tar.gz
+		tar xzf x265_1.9.tar.gz
+		mv x265_1.9 ./x265
+		rm -rf x265_1.9.tar.gz
+		
 	fi
 
 	if ! [ -d libass ]; then
