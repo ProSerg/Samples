@@ -185,13 +185,9 @@ echo "#### LIB RTMPDUMP ####"
 echo ""
 
  cd $SDIR/rtmpdump
- mkdir -p build
- cd ./build
- export CXXFLAGS="-fPIC" && OPENSSL_ROOT_DIR=$SSL ZLib_DIR=$ZLIB  cmake ..
- error "Build" $?
- make
-#DESTDIR=$LD make install
-#make clean
+ cd ./librtmp
+ make SYS=posix
+ error "Config" $?
  cd $curdir
 }
 
@@ -259,7 +255,7 @@ build_x264
 build_x265
 build_vorbis
 #build_zlib delete
-#build_rtmp #FIXME it doesn't building.
+build_rtmp 
 build_theora
 build_libass
 build_ffmpeg 
