@@ -286,7 +286,7 @@ cd $root/$target
 
 name=ffmpeg
 version=1.0
-download_msg "$name $version"
+download_msg "FFMPEG BLOCK"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
@@ -296,14 +296,20 @@ cp -r -v  ./../../CMakes/$name/make.sh ./
 	mkdir -p build
 	cd ./src
 
-	if ! [ -d yasm ]; then
+	name=yasm
+	version=1.3
+	download_msg "$name $version"
+	if ! [ -d $name ]; then
 		wget http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
 		tar xzf yasm-1.3.0.tar.gz
 		mv yasm-1.3.0 yasm
 		rm -rf yasm-1.3.0.tar.gz
 	fi
 
-	if ! [ -d ffmpeg ]; then
+	name=ffmpeg
+	version=1.0
+	download_msg "$name $version"
+	if ! [ -d $name ]; then
 		url=http://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
         	echo "wget $url"
         	wget $url
@@ -311,7 +317,10 @@ cp -r -v  ./../../CMakes/$name/make.sh ./
         	rm -rf ffmpeg-snapshot.tar.bz2
 	fi
 		
-	if ! [ -d x264 ]; then
+	name=x264
+	version=1.0
+	download_msg "$name $version"
+	if ! [ -d $name ]; then
 		url=http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
                 echo "wget $url"
                 wget  $url 
@@ -321,11 +330,17 @@ cp -r -v  ./../../CMakes/$name/make.sh ./
 
 	fi
 
-	if ! [ -d rtmpdump ]; then
+	name=rtmpdump
+	version=1.0
+	download_msg "$name $version"
+	if ! [ -d $name ]; then
                 git clone git://git.ffmpeg.org/rtmpdump
         fi
 
-	if ! [ -d x265 ]; then
+	name=x265
+	version=1.0
+	download_msg "$name $version"
+	if ! [ -d $name ]; then
 		#hg clone https://bitbucket.org/multicoreware/x265
 		wget https://bitbucket.org/multicoreware/x265/downloads/x265_1.9.tar.gz
 		tar xzf x265_1.9.tar.gz
@@ -334,19 +349,31 @@ cp -r -v  ./../../CMakes/$name/make.sh ./
 		
 	fi
 
-	if ! [ -d libass ]; then
+	name=libass
+	version=1.0
+	download_msg "$name $version"
+	if ! [ -d $name ]; then
 		git clone https://github.com/libass/libass.git 
 	fi
 	
-	if ! [ -d theora ]; then
+	name=theora
+	version=1.0
+	download_msg "$name $version"
+	if ! [ -d $name ]; then
 		git clone https://git.xiph.org/theora.git
 	fi
 
-	if ! [ -d vorbis ]; then
+	name=vorbis
+	version=1.0
+	download_msg "$name $version"
+	if ! [ -d $name ]; then
 		git clone https://git.xiph.org/vorbis.git
 	fi
 	
-	if ! [ -d fribidi  ]; then
+	name=fribidi
+	version=1.0
+	download_msg "$name $version"
+	if ! [ -d $name ]; then
 		git clone https://github.com/behdad/fribidi.git 
 	fi
 
