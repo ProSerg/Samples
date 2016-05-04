@@ -17,7 +17,8 @@ add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFF
 
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
-	COMMAND ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} --enable-static --disable-shared  && make 
+#	COMMAND export CFLAGS="$CFLAGS -fPIC" && export CXXFLAGS="$CXXFLAGS -fPIC"
+	COMMAND export CXXFLAGS="$CXXFLAGS -fPIC"  && ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} --enable-static --enable-shared  && make -j2 
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 

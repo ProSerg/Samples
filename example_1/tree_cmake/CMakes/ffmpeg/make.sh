@@ -18,12 +18,17 @@ settings () {
 	ZLIB="$LIBS/zlib"
 	LD="$LIBS/ffmpeg"
 	PATH="$LD/bin:$PATH"
-	PKG_CONFIG_PATH="$LD/lib/pkgconfig"
-	PKG_CONFIG_LIBDIR="$LD/lib/pkgconfig"  
+	
+#	PKG_CONFIG_PAT="$LD/lib/pkgconfig"
+#	PKG_CONFIG_LIBDIR="$LD/lib/pkgconfig"  
+
+
+	export LD_LIBRARY_PATH="$LIBS/freetype/lib:$LD/lib/:$LD_LIBRARY_PATH"
+	export PKG_CONFIG_PATH="$LIBS/freetype/lib/pkgconfig:$LD/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 	logdir=$curdir/../log
-	export CFLAGS="$CFLAGS -fPIC"  
-	export CXXFLAGS="$CXXFLAGS -fPIC"	
+#	export CFLAGS="$CFLAGS -fPIC"  
+#	export CXXFLAGS="$CXXFLAGS -fPIC"	
 }
 
 usage() {
@@ -65,7 +70,7 @@ build_yasm() {
  cd $SDIR/yasm
  ./configure --prefix="$LD" --bindir="$LD/bin"  
  error "Config" $?
- make
+ make -j2
  make install
 
  cd $curdir
@@ -86,7 +91,7 @@ cd $SDIR/fribidi
  	./configure --prefix="$LD"
 	error "Config" $?
  fi
-make 
+make -j2 
 make install 
 
 cd $curdir
@@ -100,12 +105,12 @@ echo "#### LIB x264 ####"
 echo ""
 
  cd $SDIR/x264
- ./configure --prefix="$LD" --bindir="$LD/bin" 
+ ./configure --prefix="$LD" --libdir="$LD/lib/" --enable-static --enable-shared 
   if [ $? -ne 0  ]; then
-	./configure --prefix="$LD" --bindir="$LD/bin" 
+	./configure --prefix="$LD" --libdir="$LD/lib/"   --enable-static --enable-shared 
 	error "Config" $?
  fi
- make
+ make -j2
  make install
  cd $curdir
 }
@@ -119,7 +124,7 @@ echo ""
  cd $SDIR/x265/build/linux
  cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$LD"  ../../source
  error "Config" $?
- make
+ make -j2
  make install
  cd $curdir
 }
@@ -138,7 +143,7 @@ echo ""
  	./configure --prefix="$LD" 
 	error "Config" $?
  fi
- make
+ make -j2
  make install
  cd $curdir
 }
@@ -151,14 +156,15 @@ echo "#### LIB ASS ####"
 echo ""
 
  cd $SDIR/libass
+ export PKG_CONFIG_PATH="$LIBS/freetype/lib/pkgconfig:$LD/lib/pkgconfig:$PKG_CONFIG_PATH"	
  ./autogen.sh
- PKG_CONFIG_PATH="$LD/lib/pkgconfig" ./configure --prefix="$LD"
+  FREETYPE_LIBS="$LIBS/freetype/lib" ./configure --prefix="$LD" --disable-require-system-font-provider
   if [ $? -ne 0  ]; then
 	./autogen.sh
-	PKG_CONFIG_PATH="$LD/lib/pkgconfig" ./configure --prefix="$LD"
+  	FREETYPE_LIBS="$LIBS/freetype/lib" ./configure --prefix="$LD" --disable-require-system-font-provider
 	error "Config" $?
  fi
- make
+ make -j2
  make install
  cd $curdir
 
@@ -173,7 +179,7 @@ echo ""
  mkdir -p build
  cd ./build
  cmake -DCMAKE_INSTALL_PREFIX=$LIBS/zlib ..
- make
+ make -j2
  make install
  cd $curdir
 }
@@ -205,7 +211,7 @@ echo ""
  	./configure --prefix=$LD 
 	error "Config" $?
  fi
- make
+ make -j2
  make install
  cd $curdir
 }
@@ -222,13 +228,18 @@ echo ""
 echo "#### FRIBIDI_LIBS=$LD/lib/ "
 echo "#### PKG_CONFIG_PATH=$LD/lib/pkgconfig "
 
-FRIBIDI_LIBS="$LD/lib/" 
-PKG_CONFIG_PATH="$LD/lib/pkgconfig" ./configure \
+#PKG_CONFIG_PATH="$LD/lib/pkgconfig" ./configure \
+
+export PKG_CONFIG_PATH="$LIBS/freetype/lib/pkgconfig:$LD/lib/pkgconfig:$PKG_CONFIG_PATH"	
+export FRIBIDI_LIBS="$LD/lib/" 
+export FREETYPE_LIBS="$LIBS/freetype/lib" 
+#  --pkg-config-flags="--static" \
+./configure \
   --enable-shared \
   --prefix="$LD" \
-  --pkg-config-flags="--static" \
   --extra-cflags="-I$LD/include" \
   --extra-ldflags="-L$LD/lib" \
+  --pkg-config-flags="--static" \
   --bindir="$LD/bin" \
   --enable-gpl \
   --enable-libass \
@@ -241,7 +252,7 @@ PKG_CONFIG_PATH="$LD/lib/pkgconfig" ./configure \
 
 #  need add RTMP
  error "Config" $?
- make
+ make -j2
  make install
  cd $curdir
 }

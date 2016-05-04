@@ -272,6 +272,19 @@ fi
 cd $root/$target
 
 
+name=ogre
+version=2.1
+download_msg "$name $version"
+mkdir -p ./$name
+cd ./$name
+cp -r ./../../CMakes/$name/CMakeLists.txt ./
+if ! [ -d src ]; then
+	hg clone https://bitbucket.org/sinbad/ogre ./src
+fi
+cd $root/$target
+
+
+
 name=freetype
 version=2.6.3
 download_msg "$name $version"
