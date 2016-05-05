@@ -81,7 +81,9 @@ build() {
 	fi
 	
 	if ! [ -z $MOD_MAKE ]; then
-		make_dir $MOD_MAKE
+		if [ -z $MOD_INSTALL ]; then
+			make_dir $MOD_MAKE
+		fi
 	fi
 		
 	if ! [ -z $MOD_INSTALL ]; then
@@ -110,6 +112,7 @@ while [ "$1" != "" ]; do
 			exit 0			
 			;;
 		-i | --install )
+			MOD_MAKE_ALL=$OFF
 			MOD_INSTALL=$ON
 			;;
 		-c | --clean )
