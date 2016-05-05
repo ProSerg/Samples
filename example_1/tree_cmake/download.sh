@@ -136,6 +136,9 @@ cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
 	git clone https://github.com/openssl/openssl.git ./src
+	cd ./src
+	git checkout remotes/origin/OpenSSL_1_0_0-stable 
+	git pull
 fi
 cd $root/$target
 
