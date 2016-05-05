@@ -19,16 +19,15 @@ settings () {
 	LD="$LIBS/ffmpeg"
 	PATH="$LD/bin:$PATH"
 	
-#	PKG_CONFIG_PAT="$LD/lib/pkgconfig"
-#	PKG_CONFIG_LIBDIR="$LD/lib/pkgconfig"  
 
-
-	export LD_LIBRARY_PATH="$LIBS/freetype/lib:$LD/lib/:$LD_LIBRARY_PATH"
-	export PKG_CONFIG_PATH="$LIBS/freetype/lib/pkgconfig:$LD/lib/pkgconfig:$PKG_CONFIG_PATH"
+#	export PKG_CONFIG_LIBDIR="$LIBS/openssl/include/:${PKG_CONFIG_LIBDIR}" 
+ 
+	export LD_LIBRARY_PATH="$LIBS/openssl/lib:$LIBS/freetype/lib:$LD/lib/:$LD_LIBRARY_PATH"
+	export PKG_CONFIG_PATH="$LIBS/openssl/lib/pkgconfig:$LIBS/freetype/lib/pkgconfig:$LD/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 	logdir=$curdir/../log
-#	export CFLAGS="$CFLAGS -fPIC"  
-#	export CXXFLAGS="$CXXFLAGS -fPIC"	
+#	export CFLAGS="$CFLAGS -I$LIBS/openssl/include"  
+#	export CXXFLAGS="$CXXFLAGS -I$LIBS/openssl/include"	
 }
 
 usage() {
@@ -192,8 +191,11 @@ echo ""
 
  cd $SDIR/rtmpdump
  cd ./librtmp
- make SYS=posix
+ make SYS=posix XCFLAGS="-I$LIBS/openssl/include"  XLDFLAGS="-L$LIBS/openssl/lib" prefix="$LIBS/ffmpeg"
  error "Config" $?
+ echo "INSTALL files"
+ cp -r -v ./librtmp.so* $LD/lib
+ cp -r -v  ./rtmp.h $LD/include
  cd $curdir
 }
 
