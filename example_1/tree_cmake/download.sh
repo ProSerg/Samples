@@ -284,6 +284,9 @@ cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
 	hg clone https://bitbucket.org/sinbad/ogre ./src
 fi
+if ! [ -d deps ]; then
+	hg clone https://bitbucket.org/cabalistic/ogredeps ./deps
+fi
 cd $root/$target
 
 
@@ -299,18 +302,6 @@ if ! [ -d src ]; then
 fi
 cd $root/$target
 
-
-#name=ffmpeg
-#version=1.0
-#download_msg "FFMPEG BLOCK"
-#mkdir -p ./$name
-#cd ./$name
-#cp -r ./../../CMakes/$name/CMakeLists.txt ./
-#cp -r -v  ./../../CMakes/$name/install.sh ./
-#cp -r -v  ./../../CMakes/$name/make.sh ./
-#	mkdir -p src
-#	mkdir -p build
-#	cd ./src
 
 	name=yasm
 	version=1.3
