@@ -300,100 +300,138 @@ fi
 cd $root/$target
 
 
-name=ffmpeg
-version=1.0
-download_msg "FFMPEG BLOCK"
-mkdir -p ./$name
-cd ./$name
-cp -r ./../../CMakes/$name/CMakeLists.txt ./
-cp -r -v  ./../../CMakes/$name/install.sh ./
-cp -r -v  ./../../CMakes/$name/make.sh ./
-	mkdir -p src
-	mkdir -p build
-	cd ./src
+#name=ffmpeg
+#version=1.0
+#download_msg "FFMPEG BLOCK"
+#mkdir -p ./$name
+#cd ./$name
+#cp -r ./../../CMakes/$name/CMakeLists.txt ./
+#cp -r -v  ./../../CMakes/$name/install.sh ./
+#cp -r -v  ./../../CMakes/$name/make.sh ./
+#	mkdir -p src
+#	mkdir -p build
+#	cd ./src
 
 	name=yasm
 	version=1.3
 	download_msg "$name $version"
-	if ! [ -d $name ]; then
+	mkdir -p ./$name
+	cd ./$name
+	cp -r ./../../CMakes/$name/CMakeLists.txt ./
+	if ! [ -d src ]; then
 		wget http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
 		tar xzf yasm-1.3.0.tar.gz
-		mv yasm-1.3.0 yasm
+		mv yasm-1.3.0 src
 		rm -rf yasm-1.3.0.tar.gz
 	fi
+	cd $root/$target
 
 	name=ffmpeg
 	version=1.0
 	download_msg "$name $version"
-	if ! [ -d $name ]; then
+	mkdir -p ./$name
+	cd ./$name
+	cp -r ./../../CMakes/$name/CMakeLists.txt ./
+	cp -r ./../../CMakes/$name/build.sh ./
+	if ! [ -d src ]; then
 		url=http://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
         	echo "wget $url"
         	wget $url
 		tar xjf ffmpeg-snapshot.tar.bz2
+		mv ffmpeg src
         	rm -rf ffmpeg-snapshot.tar.bz2
 	fi
-		
+	cd $root/$target
+
 	name=x264
 	version=1.0
 	download_msg "$name $version"
-	if ! [ -d $name ]; then
+	mkdir -p ./$name
+	cd ./$name
+	cp -r ./../../CMakes/$name/CMakeLists.txt ./
+	cp -r ./../../CMakes/$name/build.sh ./
+	if ! [ -d src ]; then
 		url=http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
                 echo "wget $url"
                 wget  $url 
 		tar xjf last_x264.tar.bz2
                 rm -rf last_x264.tar.bz2
-		mv ./x264-snapshot* ./x264
+		mv ./x264-snapshot* ./src
 
 	fi
+	cd $root/$target
 
 	name=rtmpdump
 	version=1.0
 	download_msg "$name $version"
-	if ! [ -d $name ]; then
-                git clone git://git.ffmpeg.org/rtmpdump
+	mkdir -p ./$name
+	cd ./$name
+	cp -r ./../../CMakes/$name/CMakeLists.txt ./
+	if ! [ -d src ]; then
+                git clone https://git.ffmpeg.org/rtmpdump ./src
         fi
+	cd $root/$target
 
 	name=x265
 	version=1.0
 	download_msg "$name $version"
-	if ! [ -d $name ]; then
+	mkdir -p ./$name
+	cd ./$name
+	cp -r ./../../CMakes/$name/CMakeLists.txt ./
+	if ! [ -d src ]; then
 		#hg clone https://bitbucket.org/multicoreware/x265
 		wget https://bitbucket.org/multicoreware/x265/downloads/x265_1.9.tar.gz
 		tar xzf x265_1.9.tar.gz
-		mv x265_1.9 ./x265
+		mv x265_1.9 ./src
 		rm -rf x265_1.9.tar.gz
 		
 	fi
+	cd $root/$target
 
 	name=libass
 	version=1.0
 	download_msg "$name $version"
-	if ! [ -d $name ]; then
-		git clone https://github.com/libass/libass.git 
+	mkdir -p ./$name
+	cd ./$name
+	cp -r ./../../CMakes/$name/CMakeLists.txt ./
+	cp -r ./../../CMakes/$name/build.sh ./
+	if ! [ -d src ]; then
+		git clone https://github.com/libass/libass.git ./src
 	fi
-	
+	cd $root/$target
+
 	name=theora
 	version=1.0
 	download_msg "$name $version"
-	if ! [ -d $name ]; then
-		git clone https://git.xiph.org/theora.git
+	mkdir -p ./$name
+	cd ./$name
+	cp -r ./../../CMakes/$name/CMakeLists.txt ./
+	if ! [ -d src ]; then
+		git clone https://git.xiph.org/theora.git ./src
 	fi
+	cd $root/$target
 
 	name=vorbis
 	version=1.0
 	download_msg "$name $version"
-	if ! [ -d $name ]; then
-		git clone https://git.xiph.org/vorbis.git
+	mkdir -p ./$name
+	cd ./$name
+	cp -r ./../../CMakes/$name/CMakeLists.txt ./
+	if ! [ -d src ]; then
+		git clone https://git.xiph.org/vorbis.git ./src
 	fi
-	
+	cd $root/$target
+
 	name=fribidi
 	version=1.0
 	download_msg "$name $version"
-	if ! [ -d $name ]; then
-		git clone https://github.com/behdad/fribidi.git 
+	mkdir -p ./$name
+	cd ./$name
+	cp -r ./../../CMakes/$name/CMakeLists.txt ./
+	if ! [ -d src ]; then
+		git clone https://github.com/behdad/fribidi.git ./src
 	fi
-
-cd $root/$target
+	cd $root/$target
 
 
 
