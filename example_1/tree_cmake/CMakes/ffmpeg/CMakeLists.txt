@@ -25,7 +25,8 @@ add_custom_target(${PROJECT_NAME} ALL DEPENDS
 
 ADD_CUSTOM_COMMAND(
 	OUTPUT  ${LIB}
-	COMMAND ./configure --enable-shared --prefix="${LD}" --extra-cflags="-I${LD}/include" --extra-ldflags="-L${LD}/lib" --pkg-config-flags="--static" --bindir="${LD}/bin" --enable-gpl --enable-libass --enable-libfreetype --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libx265
+	#COMMAND ./configure --enable-shared --prefix="${LD}" --extra-cflags="-I${LD}/include" --extra-ldflags="-L${LD}/lib" --pkg-config-flags="--static" --bindir="${LD}/bin" --enable-gpl --enable-libass --enable-libfreetype --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libx265
+	COMMAND ./build.sh
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 	COMMENT "FFMPEG-LIB"
 )

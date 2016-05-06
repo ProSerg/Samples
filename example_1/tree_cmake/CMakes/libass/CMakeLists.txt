@@ -13,13 +13,17 @@ set(PROJECT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/libass/.libs")
 set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/")
 
+SET(ENV{PATH} "${LIBRARY_OUTPUT_PATH}/${FFMPEG}/bin:$ENV{PATH}")
+SET(ENV{LD_LIBRARY_PATH} "${LIBRARY_OUTPUT_PATH}/freetype/lib:${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib:$ENV{LD_LIBRARY_PATH}")
+SET(ENV{PKG_CONFIG_PATH} "${LIBRARY_OUTPUT_PATH}/freetype/lib/pkgconfig:${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib/pkgconfig:$ENV{PKG_CONFIG_PATH}")
 
 add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX} )
 
 
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
-	COMMAND ./autogen.sh && FREETYPE_LIBS="${LIBRARY_OUTPUT_PATH}/freetype/lib" ./configure --prefix="${LIBRARY_OUTPUT_PATH}/${FFMPEG} " --disable-require-system-font-provider && make -j4
+#	COMMAND ./autogen.sh && FREETYPE_LIBS="${LIBRARY_OUTPUT_PATH}/freetype/lib" ./configure --prefix="${LIBRARY_OUTPUT_PATH}/${FFMPEG} " --disable-require-system-font-provider && make -j4 
+	COMMAND cd .. && ./build.sh
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
