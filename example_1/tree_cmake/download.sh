@@ -414,13 +414,19 @@ cd $root/$target
 	cd $root/$target
 
 	name=fribidi
-	version=1.0
+	version=0.19.7
 	download_msg "$name $version"
 	mkdir -p ./$name
 	cd ./$name
 	cp -r ./../../CMakes/$name/CMakeLists.txt ./
 	if ! [ -d src ]; then
-		git clone https://github.com/behdad/fribidi.git ./src
+	#	git clone https://github.com/behdad/fribidi.git ./src
+		wget http://fribidi.org/download/fribidi-0.19.7.tar.bz2
+	#	tar xjf fribidi-0.19.7.tar.bz2
+		bzip2 -cd fribidi-0.19.7.tar.bz2  | tar xf -
+                mv fribidi-0.19.7 ./src
+                rm -rf fribidi-0.19.7.tar.bz2
+
 	fi
 	cd $root/$target
 

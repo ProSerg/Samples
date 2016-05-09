@@ -3,8 +3,8 @@ project( fribidi )
 message (STATUS "CMAKE ${PROJECT_NAME} " )
 
 set(TARGET libfribidi )
-set(MAJOR 1)
-set(MINOR 0)
+set(MAJOR .0)
+set(MINOR .3.6)
 set(SUFFIX .so)
 
 set(FFMPEG ffmpeg)
@@ -19,7 +19,7 @@ add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFF
 
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
-	COMMAND  ./bootstrap && ./configure --prefix="${LIBRARY_OUTPUT_PATH}/${FFMPEG}" && make -j4
+	COMMAND  ./bootstrap && ./configure --prefix="${LIBRARY_OUTPUT_PATH}/${FFMPEG}" && make -j4 && make install
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 

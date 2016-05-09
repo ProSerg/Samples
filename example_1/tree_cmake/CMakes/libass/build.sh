@@ -39,6 +39,7 @@ cd $SDIR
   FREETYPE_LIBS="$LIBS/freetype/lib" ./configure --prefix="$LD" --disable-require-system-font-provider
   error "Config" $?
   make -j4
+  make install
 }
 
 settings

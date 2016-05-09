@@ -45,6 +45,7 @@ echo ""
 # fi
  error "Config" $?
  make -j4
+ make install
  cd $curdir
 }
 
