@@ -64,7 +64,8 @@ set (SUBDIRS
 	portaudio
 	protobuf
 	rtmpdump
-	sdl	
+	sdl
+	qtpropertybrowser	
 )
  
 
