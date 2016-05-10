@@ -431,6 +431,18 @@ cd $root/$target
 
 	fi
 	cd $root/$target
+	
+	name=qtpropertybrowser
+        version=1.0
+        download_msg "$name $version"
+        mkdir -p ./$name
+        cd ./$name
+        cp -r ./../../CMakes/$name/CMakeLists.txt ./
+        if ! [ -d src ]; then
+		git clone https://github.com/commontk/QtPropertyBrowser.git ./src
+        fi
+        cd $root/$target
+
 
 
 cd $root

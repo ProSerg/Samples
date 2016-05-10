@@ -37,12 +37,7 @@ checkTarget() {
 }
 
 make_install() {
-#[ -d ./CBin ] || error "can not find make file"
-#	cd ./CBin
-#	if ! [ -z $MOD_MAKE ]; then
-#		cmake -DLIBS="$MOD_MAKE" ..
-#		make
-#	fi
+	cd ./CBin
 	make $MOD_MAKE install
 	cd ..
 }
@@ -125,6 +120,7 @@ done
 
 }
 
+[ -d ./CBin ] || error "can not find make file"
 getDirs
 checkKeys $@
 build
