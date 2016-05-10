@@ -37,42 +37,34 @@ checkTarget() {
 }
 
 make_install() {
-[ -d ./CBin ] || error "can not find make file"
-	cd ./CBin
-	if ! [ -z $MOD_MAKE ]; then
-		cmake -DLIBS="$MOD_MAKE" ..
-		make
-	fi
-	make install
+#[ -d ./CBin ] || error "can not find make file"
+#	cd ./CBin
+#	if ! [ -z $MOD_MAKE ]; then
+#		cmake -DLIBS="$MOD_MAKE" ..
+#		make
+#	fi
+	make $MOD_MAKE install
 	cd ..
 }
 
 printList() {
-	echo `pwd`
-	echo "list targets:"
-	for dir in $dirs; do
-		echo "$dir"
-	done
+	cd ./CBin
+	make help
 }
 
 make_all() {
-[ -d ./CBin ] || mkdir -p ./CBin	
 	cd ./CBin
-	cmake -ULIBS  ..
 	make
 	cd ..
 }
 
 make_dir() {
-[ -d ./CBin ] || mkdir -p ./CBin
 	cd ./CBin
-	cmake -DLIBS="$1" ..
-	make
+	make $1
 	cd ..
 }
 
 make_clean() {
-[ -d ./CBin ] || mkdir -p ./CBin
         cd ./CBin
         make clean
 	cd ..

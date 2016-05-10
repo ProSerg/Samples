@@ -31,6 +31,10 @@ download_msg() {
     echo "[${BOLD}${FG}DOWNLOAD${NORM}] ${FY}$@ ${NORM}"
 }
 
+cmake_msg() {
+    echo "[${BOLD}${FG}CMAKE${NORM}] ${FY}$@ ${NORM}"
+}
+
 sys_msg() {
 	echo "[${BOLD}${FG}DOWNLOAD${NORM}] ${FY}$@ ${NORM}"
 }
@@ -420,15 +424,21 @@ cd $root/$target
 	cd ./$name
 	cp -r ./../../CMakes/$name/CMakeLists.txt ./
 	if ! [ -d src ]; then
-	#	git clone https://github.com/behdad/fribidi.git ./src
 		wget http://fribidi.org/download/fribidi-0.19.7.tar.bz2
-	#	tar xjf fribidi-0.19.7.tar.bz2
 		bzip2 -cd fribidi-0.19.7.tar.bz2  | tar xf -
                 mv fribidi-0.19.7 ./src
                 rm -rf fribidi-0.19.7.tar.bz2
 
 	fi
 	cd $root/$target
+
+
+cd $root
+[ -d ./CBin ] || mkdir -p ./CBin	
+	cmake_msg "..."
+	cd ./CBin
+	ls -l
+	cmake -ULIBS ..
 
 
 

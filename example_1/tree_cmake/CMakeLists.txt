@@ -46,13 +46,26 @@ SUBDIRLIST(SUBDIRS ${CMAKE_SOURCE_DIR}/source )
 set( LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${TARGET})
 set( LICENSE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${LICENSE})
 
-#message( STATUS "CURDIR: " ${CMAKE_SOURCE_DIR}  )
-#message( STATUS "SUBDIRS: " ${SUBDIRS} )
-#message( STATUS "LIBS: " ${LIBRARY_OUTPUT_PATH} )
-
-if (DEFINED LIBS )
-	set (SUBDIRS ${LIBS}  )
-endif( )
+set (SUBDIRS 
+	boost
+	cpp-netlib
+	ffmpeg
+	freeimage
+	freetype
+	gflags
+	glew
+	glog
+	googletest
+	libxml2
+	live555
+	mongocxx
+	ogre
+	openssl
+	portaudio
+	protobuf
+	rtmpdump
+	sdl	
+)
  
 
 FOREACH(dir ${SUBDIRS})
@@ -60,13 +73,6 @@ FOREACH(dir ${SUBDIRS})
 	message( STATUS "BUILD: " ${CMAKE_SOURCE_DIR}/source/${dir}  )
 	add_subdirectory( ${CMAKE_SOURCE_DIR}/${CMAKE}/${dir}  ${CMAKE_SOURCE_DIR}/${CMAKE}/${dir}/build )
 ENDFOREACH()
-
-
-#set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/${TARGER} ) 
-#set( EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR} )
-#set( LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
- 
-#set(PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 
 
 
