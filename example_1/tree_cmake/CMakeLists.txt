@@ -46,8 +46,13 @@ SUBDIRLIST(SUBDIRS ${CMAKE_SOURCE_DIR}/source )
 set( LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${TARGET})
 set( LICENSE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${LICENSE})
 
+if (DEFINED LIBS )
+ 	set (SUBDIRS ${LIBS}  )
+else( )
+
 set (SUBDIRS 
 	boost
+	openssl
 	cpp-netlib
 	ffmpeg
 	freeimage
@@ -60,14 +65,14 @@ set (SUBDIRS
 	live555
 	mongocxx
 	ogre
-	openssl
 	portaudio
 	protobuf
-	rtmpdump
 	sdl
 	qtpropertybrowser	
 )
- 
+
+endif()
+
 
 FOREACH(dir ${SUBDIRS})
 	file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/${TARGET} )

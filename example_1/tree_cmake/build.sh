@@ -38,7 +38,11 @@ checkTarget() {
 
 make_install() {
 	cd ./CBin
-	make $MOD_MAKE install
+	if ! [ -z  $MOD_MAKE  ] ; then
+		cmake -DLIBS=$MOD_MAKE ..
+	fi
+	echo "MOD:$MOD_MAKE"
+	make install
 	cd ..
 }
 
@@ -49,12 +53,14 @@ printList() {
 
 make_all() {
 	cd ./CBin
+	cmake -ULIBS ..
 	make
 	cd ..
 }
 
 make_dir() {
 	cd ./CBin
+	cmake -DLIBS=$MOD_MAKE ..
 	make $1
 	cd ..
 }

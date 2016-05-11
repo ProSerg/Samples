@@ -141,7 +141,7 @@ cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
 	git clone https://github.com/openssl/openssl.git ./src
 	cd ./src
-	git checkout remotes/origin/OpenSSL_1_0_0-stable 
+	git checkout remotes/origin/OpenSSL_1_0_1-stable 
 	git pull
 fi
 cd $root/$target
@@ -280,13 +280,15 @@ cd $root/$target
 
 
 name=ogre
-version=2.1
+version=1.8
 download_msg "$name $version"
 mkdir -p ./$name
 cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
 	hg clone https://bitbucket.org/sinbad/ogre ./src
+	cd ./src
+	hg checkout v1-9
 fi
 if ! [ -d deps ]; then
 	hg clone https://bitbucket.org/cabalistic/ogredeps ./deps
@@ -356,7 +358,7 @@ cd $root/$target
 	fi
 	cd $root/$target
 
-	name=rtmpdump
+	name=rtmp
 	version=1.0
 	download_msg "$name $version"
 	mkdir -p ./$name
