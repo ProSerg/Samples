@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
-project( libass )
+project( rtmp )
 message (STATUS "CMAKE ${PROJECT_NAME} " )
 
-set(TARGET libass )
+set(TARGET librtmp )
 set(MAJOR 1)
 set(MINOR 0)
 set(SUFFIX .a)
@@ -10,20 +10,26 @@ set(SUFFIX .a)
 set(FFMPEG ffmpeg)
 
 set(PROJECT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/libass/.libs")
+set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/librtmp")
 set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/")
 
-SET(ENV{PATH} "${LIBRARY_OUTPUT_PATH}/${FFMPEG}/bin:$ENV{PATH}")
-SET(ENV{LD_LIBRARY_PATH} "${LIBRARY_OUTPUT_PATH}/freetype/lib:${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib:$ENV{LD_LIBRARY_PATH}")
-SET(ENV{PKG_CONFIG_PATH} "${LIBRARY_OUTPUT_PATH}/freetype/lib/pkgconfig:${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib/pkgconfig:$ENV{PKG_CONFIG_PATH}")
 
 add_custom_target(${PROJECT_NAME} ALL DEPENDS ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib/${TARGET}${SUFFIX} )
 
+set(
+	LIBS
+	${PROJECT_SOURCE_DIR}/librtmp/librtmp.so
+	${PROJECT_SOURCE_DIR}/librtmp/librtmp.so.1
+	${PROJECT_SOURCE_DIR}/librtmp/librtmp.a
+)
+ 
 
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib/${TARGET}${SUFFIX}
-	COMMAND cd .. && ./build.sh
-	DEPENDS freetype
+	COMMAND cd ./librtmp && make SYS=posix XCFLAGS="-I${LIBRARY_OUTPUT_PATH}/openssl/include"  XLDFLAGS="-L${LIBRARY_OUTPUT_PATH}/openssl/lib" 
+	COMMAND cp -r ${PROJECT_SOURCE_DIR}/librtmp/librtmp.a  ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib
+	COMMAND cp -r ${PROJECT_SOURCE_DIR}/librtmp/librtmp.so  ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib
+	COMMAND cp -r ${PROJECT_SOURCE_DIR}/librtmp/librtmp.so.1  ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
@@ -40,21 +46,15 @@ ADD_CUSTOM_COMMAND(
 
 
 set(
-	LICENSE ${PROJECT_SOURCE_DIR}/COPYING 
+	LICENSE ${PROJECT_SOURCE_DIR}/librtmp/COPYING 
 )
-
-#INSTALL(
-#        CODE
-#        "EXECUTE_PROCESS (
-#        COMMAND make install
-#        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-#        )
-#        "
-#)
- 
 
 INSTALL (
 	FILES ${LICENSE} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
 )
+
+#INSTALL (
+#	FILES ${LIBS} DESTINATION ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib
+#)
 
 

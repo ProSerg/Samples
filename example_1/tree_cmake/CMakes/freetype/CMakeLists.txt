@@ -11,14 +11,15 @@ set(PROJECT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/objs/.libs")
 set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/")
 
-add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX} )
+add_custom_target(${PROJECT_NAME} ALL DEPENDS ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}${SUFFIX} )
 
 
 
 ADD_CUSTOM_COMMAND(
-	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
+	OUTPUT ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}${SUFFIX}
 #	COMMAND export CFLAGS="$CFLAGS -fPIC" && export CXXFLAGS="$CXXFLAGS -fPIC"
-	COMMAND export CXXFLAGS="$CXXFLAGS -fPIC"  && ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} --enable-static --enable-shared  && make -j2 
+	COMMAND export CXXFLAGS="$CXXFLAGS -fPIC"  && ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} --enable-static --enable-shared  && make -j4 && make install 
+	DEPENDS boost
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
@@ -47,23 +48,23 @@ set(LICENSES
 	${PROJECT_SOURCE_DIR}/docs/LICENSE.TXT
 )
 
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (
-        COMMAND make install
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-        )
-        "
-)
+#INSTALL(
+#        CODE
+#        "EXECUTE_PROCESS (
+#        COMMAND make install
+#        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+#        )
+#        "
+#)
 
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (
-        COMMAND rm -rf ./share
-        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
-        )
-        "
-)
+#INSTALL(
+#        CODE
+#        "EXECUTE_PROCESS (
+#        COMMAND rm -rf ./share
+#        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}
+#        )
+#        "
+#)
 
 INSTALL (
 	FILES ${LICENSES} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}	

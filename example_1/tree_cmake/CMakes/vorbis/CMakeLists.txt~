@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
-project( theora )
+project( vorbis )
 message (STATUS "CMAKE ${PROJECT_NAME} " )
 
-set(TARGET libtheora )
+set(TARGET libvorbis )
 set(MAJOR 1)
 set(MINOR 0)
-set(SUFFIX .so)
+set(SUFFIX .a)
 
 set(FFMPEG ffmpeg)
 
@@ -14,12 +14,12 @@ set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/lib/.libs")
 set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/")
 
 
-add_custom_target(${PROJECT_NAME} ALL DEPENDS ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib/${TARGET}${SUFFIX} )
+add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX} )
 
 
 ADD_CUSTOM_COMMAND(
-	OUTPUT ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib/${TARGET}${SUFFIX}
-	COMMAND ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${FFMPEG}  && make -j4 && make install
+	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
+	COMMAND ./autogen.sh && ./configure --prefix="${LIBRARY_OUTPUT_PATH}/${FFMPEG}" && make -j4 && make install
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
@@ -27,16 +27,16 @@ ADD_CUSTOM_COMMAND(
 	  TARGET ${PROJECT_NAME}
 	  POST_BUILD
           COMMAND ${CMAKE_COMMAND} -E make_directory ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
-          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${FFMPEG} 
-          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/bin 
-          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib 
-          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/include 
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${ffmpeg} 
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${ffmpeg}/bin 
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${ffmpeg}/lib 
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${ffmpeg}/include 
           COMMENT "POST BUILD"
 )
 
 
 set(
-	LICENSE ${PROJECT_SOURCE_DIR}/COPYING 
+	LICENSE ${PROJECT_SOURCE_DIR}/COPYING
 )
 
 INSTALL(

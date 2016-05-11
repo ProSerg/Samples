@@ -11,7 +11,7 @@ set(PROJECT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/")
 set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/")
 
-SUBDIRS ( ${CMAKE_SOURCE_DIR}/source/yasm ${CMAKE_SOURCE_DIR}/source/fribidi ${CMAKE_SOURCE_DIR}/source/libass  ${CMAKE_SOURCE_DIR}/source/theora ${CMAKE_SOURCE_DIR}/source/vorbis ${CMAKE_SOURCE_DIR}/source/x264 ${CMAKE_SOURCE_DIR}/source/x265 )
+SUBDIRS ( ${CMAKE_SOURCE_DIR}/source/yasm ${CMAKE_SOURCE_DIR}/source/fribidi ${CMAKE_SOURCE_DIR}/source/libass  ${CMAKE_SOURCE_DIR}/source/theora ${CMAKE_SOURCE_DIR}/source/vorbis ${CMAKE_SOURCE_DIR}/source/x264 ${CMAKE_SOURCE_DIR}/source/x265 ${CMAKE_SOURCE_DIR}/source/rtmp )
 
 
 set(LD ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} )
@@ -21,13 +21,14 @@ set(LIB ${PROJECT_LIB_DIR}/${TARGET}/${TARGET}${SUFFIX} )
 
 
 add_custom_target(${PROJECT_NAME} ALL DEPENDS  
-	${LIB}
+	${LD}/lib
 	)
 
 ADD_CUSTOM_COMMAND(
-	OUTPUT  ${LIB}
+	OUTPUT  ${LD}/lib
 	#COMMAND ./configure --enable-shared --prefix="${LD}" --extra-cflags="-I${LD}/include" --extra-ldflags="-L${LD}/lib" --pkg-config-flags="--static" --bindir="${LD}/bin" --enable-gpl --enable-libass --enable-libfreetype --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libx265
 	COMMAND ./build.sh
+#	DEPENDS yasm fribidi libass theora vorbis x264 x265 librtmp
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 	COMMENT "FFMPEG-LIB"
 )
@@ -43,7 +44,7 @@ ADD_CUSTOM_COMMAND(
           COMMENT "${PROJECT_NAME} BUILD"
 )
 
-ADD_DEPENDENCIES(${PROJECT_NAME} yasm fribidi libass theora vorbis x264 x265)
+ADD_DEPENDENCIES(${PROJECT_NAME} yasm fribidi libass theora vorbis x264 x265 )
 
 
 set(LICENSES

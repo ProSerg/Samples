@@ -51,6 +51,7 @@ cd $SDIR
 #  need add RTMP
  error "Config" $?
  make -j4
+ make install
  cd $curdir
 
 }

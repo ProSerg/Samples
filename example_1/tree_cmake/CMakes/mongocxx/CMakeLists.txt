@@ -15,19 +15,21 @@ set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/")
 set(CDRIVER_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cdriver_src")
 set(CDRIVER_LIB_DIR "${CDRIVER_SOURCE_DIR}/.libs")
 
-add_custom_target(${PROJECT_NAME} ALL DEPENDS  ${CDRIVER_LIB_DIR}/${CDRIVER}${SUFFIX}.0  ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}   )
+#SUBDIRS ( ${CMAKE_SOURCE_DIR}/source/boost )
+
+add_custom_target(${PROJECT_NAME} ALL DEPENDS  ${CDRIVER_LIB_DIR}/${CDRIVER}${SUFFIX}.0  ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}${SUFFIX}   )
 
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${CDRIVER_LIB_DIR}/${CDRIVER}${SUFFIX}.0
-	COMMAND ./autogen.sh --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} && make && make install
+	COMMAND ./autogen.sh --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} && make -j4 && make install
 	WORKING_DIRECTORY ${CDRIVER_SOURCE_DIR}
 	COMMENT "MONGOC-DRIVER"
 )
 
 
 ADD_CUSTOM_COMMAND(
-	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
-	COMMAND mkdir -p ./build && cd ./build && PKG_CONFIG_PATH=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/pkgconfig/ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}  .. && make && make install
+	OUTPUT ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}${SUFFIX}
+	COMMAND mkdir -p ./build && cd ./build && PKG_CONFIG_PATH=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/pkgconfig/ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}  .. && make -j4 && make install
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 	COMMENT "MONGOCXX-DRIVER"
 )
@@ -55,23 +57,23 @@ set(
 		${CMAKE_CURRENT_SOURCE_DIR}/cdriver_src/COPYING
 )
 
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (
-        COMMAND make install
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cdriver_src/
-        )
-        "
-)
+#INSTALL(
+#        CODE
+#        "EXECUTE_PROCESS (
+#        COMMAND make install
+#        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cdriver_src/
+#        )
+#       "
+#)
 
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (
-        COMMAND make install
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/build
-        )
-        "
-)
+#INSTALL(
+#        CODE
+#        "EXECUTE_PROCESS (
+#        COMMAND make install
+#        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/build
+#        )
+#        "
+#)
 
 
 #INSTALL(

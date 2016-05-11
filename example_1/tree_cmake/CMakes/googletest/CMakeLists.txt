@@ -12,13 +12,13 @@ set(PROJECT_LIB_DIR "${PROJECT_SOURCE_DIR}/build/googlemock/gtest")
 set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/build")
 
 
-add_custom_target(${PROJECT_NAME} ALL DEPENDS ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX} )
+add_custom_target(${PROJECT_NAME} ALL DEPENDS ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}${SUFFIX} )
 
 
 ADD_CUSTOM_COMMAND(
-	OUTPUT ${PROJECT_LIB_DIR}/${TARGET}${SUFFIX}
+	OUTPUT ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}${SUFFIX}
 	COMMAND mkdir -p ./build
-	COMMAND cd ./build && cmake -DCMAKE_INSTALL_PREFIX=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} .. && make
+	COMMAND cd ./build && cmake -DCMAKE_INSTALL_PREFIX=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} .. && make -j4 && make install
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
@@ -44,14 +44,14 @@ set(GMOCK
 	${PROJECT_SOURCE_DIR}/googlemock/LICENSE
 )
 
-INSTALL(
-        CODE
-        "EXECUTE_PROCESS (
-        COMMAND make install
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/build
-        )
-        "
-)
+#INSTALL(
+#        CODE
+#        "EXECUTE_PROCESS (
+#        COMMAND make install
+#        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/build
+#        )
+#        "
+#)
 
 
 INSTALL (
