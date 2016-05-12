@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project( ogre )
 message (STATUS "CMAKE ${PROJECT_NAME} " )
 
-set(TARGET libogre )
+set(TARGET libOgreMain )
 set(MAJOR 2)
 set(MINOR 1)
 set(SUFFIX .so)
@@ -16,7 +16,7 @@ add_custom_target(${PROJECT_NAME} ALL DEPENDS ${LIBRARY_OUTPUT_PATH}/${PROJECT_N
 
 
 ADD_CUSTOM_COMMAND(
-	OUTPUT ${PROJECT_LIB_DIR}/bla-bla
+	OUTPUT ${PROJECT_LIB_DIR}/Dependencies/lib/libOIS.so ${PROJECT_LIB_DIR}/Dependencies/lib/libFreeImage.a
 	COMMAND mkdir -p ./build
 	COMMAND cd ./build && cmake -DCMAKE_INSTALL_PREFIX=${PROJECT_SOURCE_DIR}/Dependencies .. && make -j4 && make install
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/deps
@@ -26,8 +26,8 @@ ADD_CUSTOM_COMMAND(
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}${SUFFIX}
 	COMMAND mkdir -p ./build
-	COMMAND cd ./build && cmake -DCMAKE_INSTALL_PREFIX=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} .. && make -j4
-	DEPENDS ${PROJECT_LIB_DIR}/bla-bla
+	COMMAND cd ./build && cmake -DCMAKE_INSTALL_PREFIX=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} .. && make -j4 && make install
+	DEPENDS ${PROJECT_LIB_DIR}/Dependencies/lib/libOIS.so ${PROJECT_LIB_DIR}/Dependencies/lib/libFreeImage.a
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 	COMMENT "OGRE"
 )
