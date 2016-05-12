@@ -280,7 +280,7 @@ cd $root/$target
 
 
 name=ogre
-version=1.8
+version=1.9
 download_msg "$name $version"
 mkdir -p ./$name
 cd ./$name
@@ -289,6 +289,7 @@ if ! [ -d src ]; then
 	hg clone https://bitbucket.org/sinbad/ogre ./src
 	cd ./src
 	hg checkout v1-9
+	cd ..
 fi
 if ! [ -d deps ]; then
 	hg clone https://bitbucket.org/cabalistic/ogredeps ./deps
