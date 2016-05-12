@@ -38,15 +38,6 @@ set(
 	LICENSE ${PROJECT_SOURCE_DIR}/COPYING.txt 
 )
 
-#INSTALL(
-#        CODE
-#        "EXECUTE_PROCESS (
-#        COMMAND make install
-#        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/build
-#        )
-#        "
-#)
-
 
 INSTALL (
 	FILES ${LICENSE} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}

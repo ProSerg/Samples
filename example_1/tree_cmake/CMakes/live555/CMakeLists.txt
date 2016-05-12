@@ -23,7 +23,6 @@ set(LIBS
 
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}${SUFFIX}.${MAJOR}.${MINOR}
-#	COMMAND ./genMakefiles linux && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}  && make
 #	COMMAND ./genMakefiles linux && make
 	COMMAND ./genMakefiles linux-with-shared-libraries && make
 	COMMAND cp -r ${PROJECT_SOURCE_DIR}/groupsock/libgroupsock.so.8.1.0 ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
@@ -55,11 +54,6 @@ set(LICENSES
 INSTALL (
 	FILES ${HEADERS} DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include
 )
-
-#INSTALL (
-#	FILES ${LIBS} DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin
-#)
-
 
 INSTALL (
 	FILES ${LICENSES} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}	

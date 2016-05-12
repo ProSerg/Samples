@@ -42,15 +42,6 @@ ADD_CUSTOM_COMMAND(
 set(
 	LICENSE ${PROJECT_SOURCE_DIR}/COPYING 
 )
-
-#INSTALL(
-#        CODE
-#        "EXECUTE_PROCESS (
-#        COMMAND make install
-#        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-#        )
-#        "
-#)
  
 
 INSTALL (
