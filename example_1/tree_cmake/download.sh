@@ -284,7 +284,6 @@ version=2.1
 download_msg "$name $version"
 mkdir -p ./$name
 cd ./$name
-ls -l
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
 	hg clone https://bitbucket.org/sinbad/ogre ./src
