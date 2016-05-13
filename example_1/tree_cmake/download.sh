@@ -220,7 +220,7 @@ if ! [ -d src ]; then
 
 	# исключаем директории из выборки 
 	for dir in $exc ;do
-        	dirs="${dirs/$target\/$dir/}"
+        	dirs="${dirs/$libs\/$dir/}"
 	done
 
 	dirs=`echo "$dirs" | awk '/./'`
