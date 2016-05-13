@@ -47,6 +47,9 @@ set( PROJECT_DIRS ${CMAKE_SOURCE_DIR}/${SOURCE} )
 set( LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${TARGET})
 set( LICENSE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/${LICENSE})
 
+FILE(MAKE_DIRECTORY  ${LIBRARY_OUTPUT_PATH} )
+FILE(MAKE_DIRECTORY  ${LICENSE_OUTPUT_PATH}  )
+
 if (DEFINED LIBS )
  	set (SUBDIRS ${LIBS}  )
 else( )
@@ -117,6 +120,9 @@ set(LICENSES
 	${PROJECT_SOURCE_DIR}/LICENSE
 )
 
+INSTALL (
+        FILES ${LICENSES} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}    
+)
 
 ##
 ##
@@ -300,7 +306,8 @@ ADD_CUSTOM_COMMAND(
 
 set(LICENSES
 	${PROJECT_SOURCE_DIR}/LICENSE_1_0.txt
-)																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																					
+)
+
 
 INSTALL (
         FILES ${LICENSES} DESTINATION ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}    
@@ -328,7 +335,7 @@ add_custom_target(${PROJECT_NAME} ALL DEPENDS ${LIBRARY_OUTPUT_PATH}/${PROJECT_N
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}-${MAJOR}.${MINOR}${SUFFIX}
 	COMMAND  make
-	COMMAND  cp -r ${PROJECT_LIB_DIR}/${TARGET}-${MAJOR}.${MINOR}${SUFFIX} ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
+	COMMAND  ${CMAKE_COMMAND} -E copy ${PROJECT_LIB_DIR}/${TARGET}-${MAJOR}.${MINOR}${SUFFIX} ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}-${MAJOR}.${MINOR}${SUFFIX}
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
@@ -484,7 +491,7 @@ project( mongocxx )
 message (STATUS "CMAKE ${PROJECT_NAME} " )
 
 set(TARGET libmongocxx )
-set(CDRIVER libmongoc-1.0 )
+set(CDRIVER libbson-1.0.so )
 set(MAJOR 2)
 set(MINOR 9.3)
 set(SUFFIX .so)
@@ -498,10 +505,10 @@ set(CDRIVER_LIB_DIR "${CDRIVER_SOURCE_DIR}/.libs")
 
 #SUBDIRS ( ${CMAKE_SOURCE_DIR}/source/boost )
 
-add_custom_target(${PROJECT_NAME} ALL DEPENDS  ${CDRIVER_LIB_DIR}/${CDRIVER}${SUFFIX}.0  ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}${SUFFIX} COMMENT "${PROJECT_NAME}"  )
+add_custom_target(${PROJECT_NAME} ALL DEPENDS ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${CDRIVER}  ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}${SUFFIX} COMMENT "${PROJECT_NAME}"  )
 
 ADD_CUSTOM_COMMAND(
-	OUTPUT ${CDRIVER_LIB_DIR}/${CDRIVER}${SUFFIX}.0
+	OUTPUT  ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${CDRIVER}
 	COMMAND ./autogen.sh --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} && make -j4 && make install
 	WORKING_DIRECTORY ${CDRIVER_SOURCE_DIR}
 	COMMENT "MONGOC-DRIVER"
@@ -511,6 +518,7 @@ ADD_CUSTOM_COMMAND(
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}${SUFFIX}
 	COMMAND mkdir -p ./build && cd ./build && PKG_CONFIG_PATH=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/pkgconfig/ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}  .. && make -j4 && make install
+	DEPENDS ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${CDRIVER} 
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 	COMMENT "MONGOCXX-DRIVER"
 )
@@ -1258,9 +1266,9 @@ set(
 ADD_CUSTOM_COMMAND(
 	OUTPUT ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib/${TARGET}${SUFFIX}
 	COMMAND cd ./librtmp && make SYS=posix XCFLAGS="-I${LIBRARY_OUTPUT_PATH}/openssl/include"  XLDFLAGS="-L${LIBRARY_OUTPUT_PATH}/openssl/lib" 
-	COMMAND cp -r ${PROJECT_SOURCE_DIR}/librtmp/librtmp.a  ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib
-	COMMAND cp -r ${PROJECT_SOURCE_DIR}/librtmp/librtmp.so  ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib
-	COMMAND cp -r ${PROJECT_SOURCE_DIR}/librtmp/librtmp.so.1  ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib
+	COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/librtmp/librtmp.a  ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib/librtmp.a
+	COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/librtmp/librtmp.so  ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib/librtmp.so
+	COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/librtmp/librtmp.so.1  ${LIBRARY_OUTPUT_PATH}/${FFMPEG}/lib/librtmp.so.1
 	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
