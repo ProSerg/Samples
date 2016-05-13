@@ -213,10 +213,10 @@ cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
 	git clone https://github.com/boostorg/boost.git ./src
 	cd ./src 
-	target=./libs
+	libs=./libs
 	
 	exc="compute dll hana metaparse"
-	dirs=`find $target/* -maxdepth 0 -type d `	
+	dirs=`find $libs/* -maxdepth 0 -type d `	
 
 	# исключаем директории из выборки 
 	for dir in $exc ;do
@@ -284,6 +284,7 @@ version=2.1
 download_msg "$name $version"
 mkdir -p ./$name
 cd ./$name
+ls -l
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
 	hg clone https://bitbucket.org/sinbad/ogre ./src
