@@ -10,6 +10,8 @@ MOD_INSTALL=$OFF
 MOD_CLEAN=$OFF
 dir=""
 CMOD=""
+ARGS=""
+CARGS=""
 
 error () {
         echo "$1"
@@ -39,7 +41,7 @@ checkTarget() {
 make_install() {
 	cd ./CBin
 	if ! [ -z  $MOD_MAKE  ] ; then
-		cmake -DLIBS=$MOD_MAKE ..
+		cmake  ..
 	fi
 	echo "MOD:$MOD_MAKE"
 	make install
@@ -52,13 +54,25 @@ printList() {
 }
 
 make_all() {
-	cd ./CBin
-	cmake -ULIBS ..
+	make_clean
+	mkdir -p ./CBin
+	if [ -z "$ARGS" ]; then
+		cd ./CBin
+		cmake ..		
+	else
+		for line in $ARGS ; do
+			CARGS="$CARGS -DEXCLUDE_$line:BOOL=TRUE"
+		done
+		cd ./CBin
+		cmake $CARGS ..	
+	fi
 	make
 	cd ..
 }
 
 make_dir() {
+	make_clean
+	mkdir -p ./CBin
 	cd ./CBin
 	cmake -DLIBS=$MOD_MAKE ..
 	make $1
@@ -66,10 +80,7 @@ make_dir() {
 }
 
 make_clean() {
-        cd ./CBin
-        make clean
-	cd ..
-
+        rm -rf ./CBin
 }
 
 build() {
@@ -94,14 +105,13 @@ usage() {
 
 checkKeys() {
 
-local KEYS=`getopt -n "$scriptName" -o hlic --long \
-"help,list,install,clean
+local KEYS=`getopt -n "$scriptName" -o hlice: --long \
+"help,list,install,clean,exclude::
 " -- "$@"`
 eval set -- "$KEYS"
 while [ "$1" != "" ]; do
-	case $1 in 
+	case $1 in
 		-h | --help )
-			usage
 			exit 0
 			;;
 		-l | --list )
@@ -113,7 +123,16 @@ while [ "$1" != "" ]; do
 			MOD_INSTALL=$ON
 			;;
 		-c | --clean )
+			make_clean
 			exit 0
+			;;
+		-e | --exclude)
+			if [ -z $2 ]; then
+				usage
+				exit 0
+			fi
+			ARGS="$ARGS $2"
+			shift
 			;;
 		--) 
 			;;
@@ -126,7 +145,7 @@ done
 
 }
 
-[ -d ./CBin ] || error "can not find make file"
+[ -d ./CBin ] || mkdir -p ./CBin
 getDirs
 checkKeys $@
 build

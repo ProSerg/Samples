@@ -306,6 +306,12 @@ cd ./$name
 cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
 	git clone http://git.sv.nongnu.org/r/freetype/freetype2.git ./src
+	if ! [ -d src ]; then
+		wget https://sourceforge.net/projects/freetype/files/freetype2/$version/freetype-"$version".tar.bz2
+		tar xjf freetype-"$version".tar.bz2
+		mv freetype-"$version" ./src
+		rm -rf  freetype-"$version".tar.bz2
+	fi
 fi
 cd $root/$target
 
