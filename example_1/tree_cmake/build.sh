@@ -74,9 +74,16 @@ make_dir() {
 	make_clean
 	mkdir -p ./CBin
 	cd ./CBin
-	cmake -DLIBS=$MOD_MAKE ..
+	cmake ..
 	make $1
 	cd ..
+}
+
+make_update() {
+	make_clean
+	mkdir -p ./CBin
+	cd ./CBin
+	cmake ..
 }
 
 make_clean() {
@@ -105,8 +112,8 @@ usage() {
 
 checkKeys() {
 
-local KEYS=`getopt -n "$scriptName" -o hlice: --long \
-"help,list,install,clean,exclude::
+local KEYS=`getopt -n "$scriptName" -o hlice:u --long \
+"help,list,install,clean,update,exclude::
 " -- "$@"`
 eval set -- "$KEYS"
 while [ "$1" != "" ]; do
@@ -117,6 +124,10 @@ while [ "$1" != "" ]; do
 		-l | --list )
 			printList
 			exit 0			
+			;;
+		-u | --update)
+			make_update
+			exit 0
 			;;
 		-i | --install )
 			MOD_MAKE_ALL=$OFF
