@@ -39,6 +39,10 @@ sys_msg() {
 	echo "[${BOLD}${FG}DOWNLOAD${NORM}] ${FY}$@ ${NORM}"
 }
 
+error_msg() {
+	echo "[${BOLD}${FR}ERROR${NORM}] ${FY}$@ ${NORM}"
+}
+
 colors
 
 target=source
@@ -440,26 +444,57 @@ cd $root/$target
 
 	fi
 	cd $root/$target
+
+	
+	name=qt
+        version=5.6
+	arhive=Qt.tar.gz
+        download_msg "$name $version"
+        mkdir -p ./$name
+        cd ./$name
+        if ! [ -d src ]; then
+		error_msg "not exist sourc for $name"
+        else
+		cd ./src
+		[ -f "$arhive" ] || error_msg "not exist arhive for $name"
+	fi
+        cd $root/$target
+
+
 	
 	name=qtpropertybrowser
         version=1.0
         download_msg "$name $version"
         mkdir -p ./$name
         cd ./$name
-        cp -r ./../../CMakes/$name/CMakeLists.txt ./
+	cp -r ./../../CMakes/$name/build.sh ./
         if ! [ -d src ]; then
-		git clone https://github.com/commontk/QtPropertyBrowser.git ./src
+		#git clone https://github.com/intbots/QtPropertyBrowser ./src
+		hg clone https://bitbucket.org/eligt/qtpropertybrowser ./src
+        fi
+        cd $root/$target
+
+	name=qwt
+        version=6.1.2
+        download_msg "$name $version"
+        mkdir -p ./$name
+        cd ./$name
+#	cp -r -v ./../../CMakes/$name/build.sh ./
+        if ! [ -d src ]; then
+		wget https://sourceforge.net/projects/qwt/files/qwt/6.1.2/$name-$version.tar.bz2
+		bzip2 -cd $name-$version.tar.bz2  | tar xf -
+                mv $name-$version ./src
+                rm -rf  $name-$version.tar.bz2
         fi
         cd $root/$target
 
 
-
 cd $root
 [ -d ./CBin ] || mkdir -p ./CBin	
-	cmake_msg "..."
-	cd ./CBin
-	ls -l
-	cmake -ULIBS ..
+#	cmake_msg "..."
+#	cd ./CBin
+#	ls -l
+#	cmake -ULIBS ..
 
 
 
