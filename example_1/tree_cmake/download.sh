@@ -453,10 +453,10 @@ cd $root/$target
         mkdir -p ./$name
         cd ./$name
         if ! [ -d src ]; then
-		error_msg "not exist sourc for $name"
+		error_msg "not exists src"
         else
 		cd ./src
-		[ -f "$arhive" ] || error_msg "not exist arhive for $name"
+		[ -f "$arhive" ] || error_msg "not exist arhive $arhive"
 	fi
         cd $root/$target
 
