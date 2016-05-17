@@ -45,6 +45,7 @@ error_msg() {
 
 colors
 
+libs=libs
 target=source
 root=`pwd`
 #./clean.sh
@@ -448,15 +449,16 @@ cd $root/$target
 	
 	name=qt
         version=5.6
-	arhive=Qt.tar.gz
         download_msg "$name $version"
         mkdir -p ./$name
         cd ./$name
-        if ! [ -d src ]; then
-		error_msg "not exists src"
-        else
-		cd ./src
-		[ -f "$arhive" ] || error_msg "not exist arhive $arhive"
+        if ! [ -d $root/$libs/$name/$version ]; then
+		git clone https://github.com/sarbjit-longia/qt-online-installer 
+		cd ./qt-online-installer
+		echo "  need to make the installer executable" 
+		sudo chmod +x ./qt-unified-linux-x64-2.0.3-online.run
+		mkdir -p $root/$target/$name
+		./qt-unified-linux-x64-2.0.3-online.run 	
 	fi
         cd $root/$target
 
