@@ -50,9 +50,9 @@ target=source
 root=`pwd`
 #./clean.sh
 
-[ -d $target ] || mkdir $target
-
-
+[ -d $target ] || mkdir -p $target
+[ -d $libs ] || mkdir -p $libs
+[ -d ./CBin ] || mkdir -p ./CBin
 
 cd $target
 
@@ -251,10 +251,12 @@ version=0.12
 download_msg "$name $version"
 mkdir -p ./$name
 cd ./$name
-cp -r ./../../CMakes/$name/CMakeLists.txt ./
+#cp -r ./../../CMakes/$name/CMakeLists.txt ./
+cp -r ./../../CMakes/$name/build.sh ./
 if ! [ -d src ]; then
 	git clone https://github.com/cpp-netlib/cpp-netlib ./src
-    	cd ./src
+    	cd ./src 
+	git checkout $version-release
     	git submodule init
     	git submodule update
 fi
@@ -453,7 +455,7 @@ cd $root/$target
         mkdir -p ./$name
         cd ./$name
         if ! [ -d $root/$libs/$name/$version ]; then
-		git clone https://github.com/sarbjit-longia/qt-online-installer 
+		[ -d qt-online-installer  ] || git clone https://github.com/sarbjit-longia/qt-online-installer 
 		cd ./qt-online-installer
 		echo "  need to make the installer executable" 
 		sudo chmod +x ./qt-unified-linux-x64-2.0.3-online.run
@@ -491,8 +493,7 @@ cd $root/$target
         cd $root/$target
 
 
-cd $root
-[ -d ./CBin ] || mkdir -p ./CBin	
+cd $root	
 #	cmake_msg "..."
 #	cd ./CBin
 #	ls -l
