@@ -249,7 +249,7 @@ IF (NOT DEFINED EXCLUDE_${PROJECT_NAME})
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include 
 		COMMAND mkdir -p ./build
 		COMMAND cd ./build && cmake -DCMAKE_INSTALL_PREFIX=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}  -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++  -DBOOST_ROOT:PATHNAME=${LIBRARY_OUTPUT_PATH}/boost -DBOOST_LIBRARY_DIRS:FILEPATH=${LIBRARY_OUTPUT_PATH}/boost/lib -DOPENSSL_ROOT_DIR=${LIBRARY_OUTPUT_PATH}/openssl -DOPENSSL_LIBRARIES=${LIBRARY_OUTPUT_PATH}/openssl/bin -DOPENSSL_INCLUDE_DIR=${LIBRARY_OUTPUT_PATH}/openssl/include .. && make -j4 && make install
-		DEPENDS boost
+		DEPENDS boost openssl
 		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 		COMMENT "cpp-NetLib"
 	)
@@ -390,10 +390,10 @@ IF (NOT DEFINED EXCLUDE_${PROJECT_NAME})
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib 
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include 
 		COMMAND ./genMakefiles linux-with-shared-libraries && make
-		COMMAND cp -r ${PROJECT_SOURCE_DIR}/groupsock/libgroupsock.so.8.1.0 ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
-		COMMAND cp -r ${PROJECT_SOURCE_DIR}/liveMedia/libliveMedia.so.52.0.4 ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
-		COMMAND cp -r ${PROJECT_SOURCE_DIR}/BasicUsageEnvironment/libBasicUsageEnvironment.so.1.0.0 ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
-		COMMAND cp -r ${PROJECT_SOURCE_DIR}/UsageEnvironment/libUsageEnvironment.so.3.1.0 ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
+		COMMAND cp -r ${PROJECT_SOURCE_DIR}/groupsock/libgroupsock.so.* ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
+		COMMAND cp -r ${PROJECT_SOURCE_DIR}/liveMedia/libliveMedia.so.* ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
+		COMMAND cp -r ${PROJECT_SOURCE_DIR}/BasicUsageEnvironment/libBasicUsageEnvironment.so.* ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
+		COMMAND cp -r ${PROJECT_SOURCE_DIR}/UsageEnvironment/libUsageEnvironment.so.* ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
 		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 		COMMENT "LiveMedia555"
 	)
