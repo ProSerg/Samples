@@ -449,7 +449,7 @@ cd $root/$target
 	cd $root/$target
 
 	
-	name=qt
+	name=Qt
         version=5.6
         download_msg "$name $version"
         mkdir -p ./$name
