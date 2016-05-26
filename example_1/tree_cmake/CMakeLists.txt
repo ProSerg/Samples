@@ -1268,10 +1268,12 @@ IF (NOT DEFINED EXCLUDE_${PROJECT_NAME})
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin 
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib 
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include 
-		COMMAND mkdir -p ./build
-		COMMAND cd ./build &&  cmake -DCMAKE_PREFIX_PATH=${LIBRARY_OUTPUT_PATH}/${QT}/5.6/gcc_64 -DCMAKE_INSTALL_PREFIX=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} .. && make && make install
+		#COMMAND mkdir -p ./build
+		#COMMAND cd ./build &&  cmake -DCMAKE_PREFIX_PATH=${LIBRARY_OUTPUT_PATH}/${QT}/5.6/gcc_64 -DCMAKE_INSTALL_PREFIX=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} .. && make && make install
 		#"QMAKESPEC=${LIBRARY_OUTPUT_PATH}/${QT}/5.6/gcc_64/mkspecs/linux-g++"
-		#COMMAND ${CMAKE_COMMAND} -E env "PATH=PATH:${LIBRARY_OUTPUT_PATH}/${QT}/bin" qmake qtpropertybrowser.pro 
+		#COMMAND ${CMAKE_COMMAND} -E env "PATH=PATH:${LIBRARY_OUTPUT_PATH}/${QT}/bin" qmake qtpropertybrowser.pro  
+		COMMAND ./configure
+		COMMAND ${CMAKE_COMMAND} -E env "PATH=PATH:${LIBRARY_OUTPUT_PATH}/${QT}/bin" qmake && make  
 		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} 
 	)
 

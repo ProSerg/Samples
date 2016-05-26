@@ -473,8 +473,8 @@ cd $root/$target
         cd ./$name
 	cp -r ./../../CMakes/$name/build.sh ./
         if ! [ -d src ]; then
-		git clone https://github.com/intbots/QtPropertyBrowser ./src
-		#hg clone https://bitbucket.org/eligt/qtpropertybrowser ./src
+		#git clone https://github.com/intbots/QtPropertyBrowser ./src
+		hg clone https://bitbucket.org/eligt/qtpropertybrowser ./src
         fi
         cd $root/$target
 
