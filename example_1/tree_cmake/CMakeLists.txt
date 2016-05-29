@@ -1253,7 +1253,7 @@ IF (NOT DEFINED EXCLUDE_${PROJECT_NAME})
 
 	add_custom_target(${PROJECT_NAME} ALL 
 		DEPENDS  
-		${LIBRARY_OUTPUT_PATH}/${TARGET}${SUFFIX}
+		${PROJECT_SOURCE_DIR}/lib/libQtSolutions_PropertyBrowser-head.so
 		COMMENT "${PROJECT_NAME}"
 		)
 
@@ -1261,33 +1261,34 @@ IF (NOT DEFINED EXCLUDE_${PROJECT_NAME})
 	set(ENV{PATH} "${LIBRARY_OUTPUT_PATH}/${QT}/bin")
 
 	ADD_CUSTOM_COMMAND(
-		OUTPUT  ${LIBRARY_OUTPUT_PATH}/${TARGET}${SUFFIX}
-		#TARGET ${PROJECT_NAME}
+		OUTPUT  ${PROJECT_SOURCE_DIR}/lib/libQtSolutions_PropertyBrowser-head.so
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} 
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin 
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib 
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include 
-		#COMMAND mkdir -p ./build
-		#COMMAND cd ./build &&  cmake -DCMAKE_PREFIX_PATH=${LIBRARY_OUTPUT_PATH}/${QT}/5.6/gcc_64 -DCMAKE_INSTALL_PREFIX=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} .. && make && make install
-		#"QMAKESPEC=${LIBRARY_OUTPUT_PATH}/${QT}/5.6/gcc_64/mkspecs/linux-g++"
-		#COMMAND ${CMAKE_COMMAND} -E env "PATH=PATH:${LIBRARY_OUTPUT_PATH}/${QT}/bin" qmake qtpropertybrowser.pro  
-		COMMAND ./configure
-		COMMAND ${CMAKE_COMMAND} -E env "PATH=PATH:${LIBRARY_OUTPUT_PATH}/${QT}/bin" qmake && make  
+		COMMAND ./configure -library
+		COMMAND ${CMAKE_COMMAND} -E env "PATH=${LIBRARY_OUTPUT_PATH}/${QT}/5.6/gcc_64/bin" qmake && make
 		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} 
 	)
 
-#	FILE(GLOB HEADERS "${PROJECT_SOURCE_DIR}/src/*.h")
-#	FILE(GLOB LIBS "${PROJECT_SOURCE_DIR}/lib/libqwt.*")
+	FILE(GLOB HEADERS "${PROJECT_SOURCE_DIR}/src/*.h")
+
+	set( LIBS 
+		"${PROJECT_SOURCE_DIR}/lib/libQtSolutions_PropertyBrowser-head.so"
+		"${PROJECT_SOURCE_DIR}/lib/libQtSolutions_PropertyBrowser-head.so.1"
+		"${PROJECT_SOURCE_DIR}/lib/libQtSolutions_PropertyBrowser-head.so.1.0"
+		"${PROJECT_SOURCE_DIR}/lib/libQtSolutions_PropertyBrowser-head.so.1.0.0"
+	)
 
 
-#	INSTALL (
-#		FILES ${LIBS} DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
-#	)
+	INSTALL (
+		FILES ${LIBS} DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib
+	)
 
-#	INSTALL (
-#		FILES ${HEADERS} DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include
-#	)
+	INSTALL (
+		FILES ${HEADERS} DESTINATION ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include
+	)
 
 
 ENDIF(NOT DEFINED EXCLUDE_${PROJECT_NAME} )
