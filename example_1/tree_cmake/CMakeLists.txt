@@ -553,7 +553,7 @@ IF (NOT DEFINED EXCLUDE_${PROJECT_NAME})
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin 
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib 
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include 
-		COMMAND ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} --disable-shared  && make -j4 && make install
+		COMMAND ./autogen.sh && ./configure --prefix=${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}  && make -j4 && make install
 		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 	)
 
