@@ -287,7 +287,7 @@ cd $root/$target
 
 
 name=ogre
-version=2.1
+version=1.10
 download_msg "$name $version"
 mkdir -p ./$name
 cd ./$name
@@ -295,7 +295,7 @@ cp -r ./../../CMakes/$name/CMakeLists.txt ./
 if ! [ -d src ]; then
 	hg clone https://bitbucket.org/sinbad/ogre ./src
 	cd ./src
-	hg checkout v2-1
+	hg checkout v1-10
 	cd ..
 fi
 if ! [ -d deps ]; then
