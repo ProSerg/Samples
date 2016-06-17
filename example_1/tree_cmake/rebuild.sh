@@ -10,8 +10,10 @@ MOD_LIB=""
 MOD_CLEAN="CLEAN"
 MOD_BUILD="BUILD"
 MOD_INSTALL="INSTALL"
-MOD_DOWNLOAD="DOWNLOAD"
+MOD_DOWNLOAD="DOWNLOAD" # it will patching too.
 MOD_HELP="HELP"
+EXARGS=""
+DWARGS=""
 
 #functions
 err_msg() {
@@ -42,10 +44,10 @@ IsLib() {
 
 usage() {
  echo "usage: $0 [options]
-    download           	run install in batch mode (without manual intervention),
-    install            	no error if install prefix already exists
-    make           	print this help message and exit
-    patching    	install prefix, defaults to
+    download           	FIXME
+    install            	FIXME
+    make           	FIXME
+    patching    	FIXME
     help         	FIXME
     clean		FIXME
 "
@@ -109,16 +111,74 @@ checkTarget() {
  [ $? -eq -1 ] && return -1
 }
 
+checkKeys() {
 
-# FIXME It needs to add a massage about an error.
-CheckKeys() {
-
-local KEYS=`getopt -n "$scriptName" --long \
-"help,clean,download,make::,install::,update::,exclude::
+local KEYS=`getopt -n "$THIS_FILE" -o hlice:u --long \
+"help,list,install::,clean,update::,exclude::
 " -- "$@"`
+eval set -- "$KEYS"
 while [ "$1" != "" ]; do
 	case $1 in
-		help )
+		-h | --help )
+			echo "HELP"
+			exit 0
+			;;
+		-l | --list )
+			echo "LIST"
+			exit 0			
+			;;
+		-u | --update)
+			if [ -z $2 ]; then
+				usage
+				exit 0
+			fi
+			ARGS="$ARGS $2"
+			echo "UPDATE $ARGS"
+			shift 2
+			;;
+		-i | --install )
+			if [ -z $2 ]; then
+				usage
+				exit 0
+			fi
+			ARGS="$ARGS $2"
+			echo "INSTALL $ARGS"
+			shift 2
+			;;
+		-c | --clean )
+			echo "LIST"
+			exit 0
+			;;
+		-e | --exclude)
+			if [ -z $2 ]; then
+				usage
+				exit 0
+			fi
+			ARGS="$ARGS $2"
+			echo "EXCLUDE $ARGS"
+			shift 2
+			;;
+		--) 
+			shift
+			;;
+		*)
+			echo "TARGET $1"
+			shift
+			;;
+	esac
+done
+
+}
+
+# FIXME It needs to add a massage about an error.
+CheckKeys2() {
+
+local KEYS=`getopt -n "$THIS_FILE" -o hlice:u --long \
+"help,clean,download:,make:,install:,update:,exclude: $@"`
+#eval set -- $KEYS
+while [ "$1" != "" ]; do
+	case $1 in
+		--help )
 			if [ -z $MOD ]; then  
 			  MOD=$MOD_HELP
 			else 
@@ -126,48 +186,79 @@ while [ "$1" != "" ]; do
 			fi
 			;;
 		download )
-			if [ -z $MOD ]; then  
+			if [ -z $MOD || "$MOD" -eq "$MOD_DOWNLOAD" ]; then
 			  MOD=$MOD_DOWNLOAD
+			  if  [ -n $2 ]; then
+			    DWARGS="$DWARGS $2"
+			    echo "Test $DWARGS $3"
+			    shift
+			  else
+			    return -1
+			  fi
+			  
 			else 
 			  return -1
 			fi
 			;;
-		update )
+		--update )
 			if [ -z $MOD ]; then
 			  MOD=$MOD_UPDATE
+			  if  [ -n $2 ]; then
+			    DWARGS="$DWARGS $2"
+			    shift
+			  else
+			    return -1
+			  fi
 			else 
 			  return -1
 			fi
 			;;
-		install )
+		--install )
 			if [ -z $MOD ]; then
 			  MOD=$MOD_INSTALL
 			else 
 			  return -1
 			fi
 			;;
-		clean )
+		--clean )
 			if [ -z $MOD ]; then
 			  MOD=$MOD_CLEAN
 			else 
 			  return -1
 			fi
 			;;
-		exclude )
-			if [ -z $MOD || $MOD -eq $MOD_BUILD ]; then #FIXME it can used again
+		--exclude )
+			if [ -z $MOD || $MOD -eq $MOD_BUILD ]; then 
 			  if  [ -n $2 ]; then
 			    EXARGS="$EXARGS $2"
 			    MOD=$MOD_BUILD
+			  else
+			    return -1
 			  fi
 			else 
 			  return -1
 			fi
 			shift
 			;;
+		--make )
+			if [ -z $MOD || $MOD -eq $MOD_BUILD ]; then
+			  if  [ -n $2 ]; then
+			    MOD_LIB="$2"
+			    MOD=$MOD_BUILD
+			    shift
+			  else
+			    return -1
+			  fi
+			else 
+			  return -1
+			fi
+			;;
 		--) 
+			shift
 			;;
 		*)
-			if [ -z $MOD || $MOD -eq $MOD_BUILD ]; then
+			#if [ -z $MOD || "$MOD" -eq "$MOD_BUILD" ]; then
+			if [ -z $MOD ]; then
 			  checkTarget $1
 			  if [ $? -eq 1 ]; then
 			    MOD_LIB=$lb
@@ -180,27 +271,26 @@ while [ "$1" != "" ]; do
 			fi
 			;;
 	esac
-	shift
 done
 
+return 1
 }
 
+Avtomat() {
+local COMM=""
 
-Main() {
-
-CheckKeys $@
-
-if [ $1 -eq -1]; then
-  usage
-  return -1
+if [ -z $1 ]; then
+ COMM=$MOD
+else
+ COMM=$1
 fi 
 
-case $MOD in
+case $COMM in
   "$MOD_DOWNLOAD" )
-	if [ -z $MOD_LIB ]; then
+	if [ -z $DWARGS ]; then
 	  echo "FIXME download all"
 	else
-	  echo "FIXME download $MOD_LIB" 	
+	  echo "FIXME download $DWARGS" 	
 	fi
 	 ;;	
   "$MOD_BUILD" )
@@ -235,6 +325,27 @@ case $MOD in
    "$MOD_HELP" )
 	;;
 esac
+
+}
+
+Main() {
+
+echo "Res: $# "
+if [ $# -eq 0 ]; then
+   Avtomat $MOD_DOWNLOAD
+   Avtomat $MOD_BUILD
+   Avtomat $MOD_INSTALL
+else
+  CheckKeys2 $@
+
+  if [ $? -eq -1 ]; then
+    usage
+    return -1
+  fi 
+
+  Avtomat 
+fi
+
 }
 
 
