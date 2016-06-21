@@ -16,8 +16,8 @@ def usage():
 
 def HandlerArgs():
 	parser = argparse.ArgumentParser(description="A prog for assembly libs")
-	parser.add_argument("libs" ,nargs="*", help="print value", default="all")
-	parser.add_argument("--download" ,action='store_true', help="downlaod libs")
+	parser.add_argument("--libs" ,nargs="*", help="print value", default="all")
+	parser.add_argument("--download" ,action='store_true', help="download libs")
 	parser.add_argument("--install" ,action='store_true', help="install libs")
 	parser.add_argument("--make" ,action='store_true', help="build libs")
 	parser.add_argument("--exception" ,nargs="+", help="exception libs")
