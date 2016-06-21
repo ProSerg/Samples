@@ -2,13 +2,19 @@
 
 import argparse
 import sys
-
+import re
+import subprocess
+import copy
 ####
 # OTHER MODE
 ####
 
 
 
+####
+
+####
+array=[]
 ####
 
 def usage():
@@ -33,11 +39,29 @@ def PrintEcho(options):
 	print ("Exception: {}".format(options.exception) )
 	
 # it needs for exseption "ALL" if there is another lib. 	
-def filter():
+def parsLibs(nameFile,array):
+	dfile = open(nameFile)
+	for line in iter(dfile):
+		p=re.compile('\s*function\s+download_([\w-]+)')
+		match=p.match(line)
+		if match:
+			array.append(match.group(1))
+	dfile.close()
 	return 0
 
 def Download(arrs,exps=""):
 	print ("DOWNLOAD: {},{}".format(arrs,exps))
+	if arrs == "all":
+		libs=copy.copy(array)
+		for exlib in iter(exps):
+			libs.remove(exlib)
+	else:
+		libs=copy.copy(arrs)
+		
+	#print("LIBS:{}".format(libs))
+	for lib in iter(libs):
+		subprocess.call("./download.sh {}".format(lib), shell=True)
+	#return res
 	
 def Install(arrs,exps=""):
 	print ("INSTALL: {},{}".format(arrs,exps))
@@ -62,10 +86,18 @@ def HandlerOpts(options):
 		
 	return 0
 	
+def init():
+	parsLibs("./download.sh",array)
+	
+
 if __name__ == "__main__":
 	print ("Hello,World!")
 	for param in sys.argv:
 		print(param)
+	init()
+	
+#	print("Arr:{}".format(array))
+	
 	options=HandlerArgs()
 	PrintEcho(options)
 	HandlerOpts(options)
