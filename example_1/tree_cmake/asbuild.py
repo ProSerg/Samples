@@ -14,7 +14,8 @@ import copy
 ####
 
 ####
-array=[]
+__arraylibs=[]
+
 ####
 
 def usage():
@@ -22,8 +23,8 @@ def usage():
 
 def HandlerArgs():
 	parser = argparse.ArgumentParser(description="A prog for assembly libs")
-	parser.add_argument("--libs" ,nargs="*", help="print value", default="all")
-	parser.add_argument("--download" ,action='store_true', help="download libs")
+	parser.add_argument("--libs" ,nargs="+", help="print value", default="all")
+	parser.add_argument("--download" ,action='store_true', help="download loibs")
 	parser.add_argument("--install" ,action='store_true', help="install libs")
 	parser.add_argument("--make" ,action='store_true', help="build libs")
 	parser.add_argument("--exception" ,nargs="+", help="exception libs")
@@ -49,45 +50,55 @@ def parsLibs(nameFile,array):
 	dfile.close()
 	return 0
 
-def Download(arrs,exps=""):
-	print ("DOWNLOAD: {},{}".format(arrs,exps))
-	if arrs == "all":
-		libs=copy.copy(array)
-		for exlib in iter(exps):
-			libs.remove(exlib)
-	else:
-		libs=copy.copy(arrs)
-		
+def Download(libs):
+	print ("DOWNLOAD: {}".format(libs))
 	#print("LIBS:{}".format(libs))
-	for lib in iter(libs):
-		subprocess.call("./download.sh {}".format(lib), shell=True)
+	#for lib in iter(libs):
+		#subprocess.call("./download.sh {}".format(lib), shell=True)
 	#return res
 	
-def Install(arrs,exps=""):
-	print ("INSTALL: {},{}".format(arrs,exps))
+def Install(libs):
+	print ("INSTALL: {}".format(libs))
 
-def Make(arrs,exps=""):
-	print ("MAKE: {},{}".format(arrs,exps))
-		
+def Make(libs):
+	print ("MAKE: {}".format(libs))
+
+def exceptlibs(libs,exps):			
+	array=[]
+	if libs == "all":
+		array=copy.copy(__arraylibs)
+		if exps:
+			for exlib in iter(exps):
+				for element in iter(array):
+					if exlib == element:
+						array.remove(exlib)
+						break
+	else:
+		array=copy.copy(libs)
+	return array
 	
+
 def HandlerOpts(options):
+	array=[]
 	libs=options.libs
 	isDownload=options.download
 	isMake=options.make
 	isInstall=options.install
 	exps=options.exception
 	
+	array=exceptlibs(libs,exps)
+	
 	if isDownload == bool(1):
-		Download(libs,exps)
+		Download(array)
 	if isMake == bool(1):
-		Make(libs,exps)
+		Make(array)
 	if isInstall == bool(1):
-		Install(libs,exps)
+		Install(array)
 		
 	return 0
 	
 def init():
-	parsLibs("./download.sh",array)
+	parsLibs("./download.sh",__arraylibs)
 	
 
 if __name__ == "__main__":
@@ -100,5 +111,6 @@ if __name__ == "__main__":
 	
 	options=HandlerArgs()
 	PrintEcho(options)
+	
 	HandlerOpts(options)
 	
