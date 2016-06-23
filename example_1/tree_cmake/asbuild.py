@@ -6,6 +6,7 @@ import re
 import subprocess
 import copy
 import os 
+
 ####
 # OTHER MODE
 ####
@@ -24,17 +25,25 @@ def usage():
 	print("FIXME")
 
 def HandlerArgs():
-	parser = argparse.ArgumentParser(description="A prog for assembly libs")
-	parser.add_argument("--libs" ,nargs="+", help="print value", default="all")
+	
+	parser = argparse.ArgumentParser(description="The prog for assembly libs")
+	parser.add_argument("libs" ,nargs="+", default="all", help="list of libs")
 	parser.add_argument("--download" ,action='store_true', help="download libs")
 	parser.add_argument("--install" ,action='store_true', help="install libs")
 	parser.add_argument("--make" ,action='store_true', help="build libs")
 	parser.add_argument("--exception" ,nargs="+", help="exception libs")
-	options = parser.parse_args()
+	if len(sys.argv) <= 1:
+		options= argparse.Namespace()
+		options.libs="all"
+		options.download=bool(0)
+		options.install=bool(1)
+		options.make=bool(1)
+		options.exception=[]
+	else: 
+		options = parser.parse_args()
 	return options
 	
 def PrintEcho(options):
-	print ("Echo: {}".format(options) )
 	print ("LIBS: {}".format(options.libs) )
 	print ("isDownload: {}".format(options.download) )
 	print ("isMake: {}".format(options.make) )
@@ -45,8 +54,8 @@ def PrintEcho(options):
 def parsLibs(nameFile,array):
 	try:
 		dfile = open(nameFile)
-	except IOError as e:
-		print("It can not find the file : {}".format(nameFile) )
+	except IOError as ex:
+		print("It can not find the file : {}.{}".format(nameFile,ex) )
 		return -1
 	else:
 		with dfile:
@@ -134,6 +143,11 @@ def HandlerOpts(options):
 	array=exceptlibs(libs,exps)
 	exclude=excludelibs(libs,exps)
 	
+	if (not isDownload) and ( not isMake ) and ( not isInstall ):
+		Make(exclude)
+		Install(array)
+		return 0
+	
 	if isDownload == bool(1):
 		Download(array)
 	if isMake == bool(1):
@@ -145,11 +159,6 @@ def HandlerOpts(options):
 	
 def init():
 	__pwd=os.path.dirname(os.path.abspath( __file__ ))
-	
-##
-## add checking work directories
-##
-	print("PWD: {}".format(__pwd) )
 	file_download="{}/download.sh".format(__pwd)
 	res = parsLibs(file_download,__arraylibs)
 	if res == -1:
@@ -158,7 +167,6 @@ def init():
 	
 
 if __name__ == "__main__":
-	print ("Hello,World!")
 	for param in sys.argv:
 		print(param)
 	if init() == -1 :
