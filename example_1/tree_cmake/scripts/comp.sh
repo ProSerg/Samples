@@ -5,7 +5,7 @@ _command() {
     cur="${COMP_WORDS[COMP_CWORD]}" 
     prev="${COMP_WORDS[COMP_CWORD-1]}" 
     subcommands="libxml2 glew gflags glog freeimage live555 openssl portaudio sdl mongocxx boost cpp-netlib googletest protobufogre freetype yasm ffmpeg x264 x265 rtmp libass theora vorbis fribidi Qt qtpropertybrowser qwt --"
-	opts="--download --install --make --help --clear"
+	opts="--download --install --make --help --clear --exception"
    
    if [[ ${cur} == -* ]] ; then
         COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
@@ -16,6 +16,10 @@ _command() {
 				break;
 			fi
 		done
+		
+		if [[ ${prev} == "--exception" ]]; then
+			COMPREPLY=( $(compgen -W "${subcommands}" -- ${cur}) ) 
+		fi
 		
 		if [[ -z ${flag} ]]; then
 			COMPREPLY=( $(compgen -W "${subcommands}" -- ${cur}) ) 

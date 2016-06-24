@@ -12,17 +12,17 @@ __arraylibs=[]
 __pwd=""
 _exclude=[]
 
-def usage():
-	print("FIXME")
-
 def HandlerArgs():
-	parser = argparse.ArgumentParser(description="The prog for assembly libs")
-	parser.add_argument("libs" ,nargs="+", default="all", help="list of libs")
-	parser.add_argument("-d","--download" ,action='store_true', help="download libs")
-	parser.add_argument("-i","--install" ,action='store_true', help="install libs")
-	parser.add_argument("-m","--make" ,action='store_true', help="build libs")
-	parser.add_argument("-e","--exception" ,nargs="+", help="exception libs")
-	parser.add_argument("-c","--clear" ,nargs="+", help="clear main cmake files")
+	parser = argparse.ArgumentParser(description="The prog for assembly libs", add_help = False, usage = '%(prog)s [options]' )
+	array=copy.copy(__arraylibs)
+	array.append("all")
+	parser.add_argument( "libs", nargs="*", choices=array, default="all", help="list of libs" )
+	parser.add_argument( "-d", "--download", action='store_true', help="download libs" )
+	parser.add_argument( "-i", "--install", action='store_true', help="install libs" )
+	parser.add_argument( "-m", "--make", action='store_true', help="build libs" )
+	parser.add_argument( "-e", "--exception", nargs="+", help="exception libs" )
+	parser.add_argument( "-h", "--help", action="help", help="usage" )
+	
 	if len(sys.argv) <= 1:
 		options= argparse.Namespace()
 		options.libs="all"
@@ -58,7 +58,7 @@ def parsLibs(nameFile,array):
 	return 0
 	
 def Clear():
-	print ("MAKE: {}".format(excludes))
+	print ("CLEAR: {}".format(excludes))
 	__pwd=os.path.dirname(os.path.abspath( __file__ ))
 	os.chdir("{}/CBin".format(__pwd))
 	try:
@@ -73,37 +73,39 @@ def Download(libs):
 	for lib in iter(libs):
 		subprocess.call("./scripts/download.sh {}".format(lib), shell=True)
 	
-def Install(libs):
+def Install():
 	#print ("INSTALL: {}".format(libs))
 	print ("INSTALLING: ")
+	res=0
 	__pwd=os.path.dirname(os.path.abspath( __file__ ))
 	os.chdir("{}/CBin".format(__pwd))
 	try:
 		subprocess.call("make install", shell=True)
+		res=1
 	except NameError as ex:
 		print("error: can't call 'make install' ")
-		return -1
-	else:
-		os.chdir("{}".format(__pwd))
-		return 0
+		res=-1
+	os.chdir("{}".format(__pwd))
+	return res
 		 
 def Make(excludes):
-	#print ("MAKE: {}".format(excludes))
+	print ("MAKE: {}".format(excludes))
 	print ("MAKING: ")
+	res=0
 	__pwd=os.path.dirname(os.path.abspath( __file__ ))
-	os.chdir("{}/CBin".format(__pwd))
+	print ("MAKING: {}".format(__pwd))
 	try:
-		subprocess.call("rm -rf \"./*\"", shell=True)
+		os.chdir("{}/CBin".format(__pwd))
+		subprocess.call("rm -rf ./*", shell=True)
 		subprocess.call("cmake {} ..".format(excludes), shell=True)
 		subprocess.call("make".format(excludes), shell=True)
+		res=1
 	except NameError as ex:
 		print("error: can't call {}".format(ex.args))
-		return -1
-	else:
-		os.chdir("{}".format(__pwd))
-		return 0
-	
-	
+		res=-1
+	os.chdir("{}".format(__pwd))
+	return 0
+
 def exceptlibs(libs,exps):			
 	array=[]
 	if libs == "all":
@@ -125,7 +127,7 @@ def excludelibs(libs,exps):
 	if libs == "all":
 		if exps:
 			for exlib in iter(exps):
-				exclude=" ".join("-DEXCLUDE_{}:BOOL=TRUE".format(exlib))
+				exclude=" ".join("-DEXCLUDE_%s:BOOL=TRUE" % (stroka) for stroka in exps )
 	else:
 		array=copy.copy(__arraylibs)
 		for lib in iter(libs):
@@ -147,15 +149,14 @@ def HandlerOpts(options):
 	
 	if (not isDownload) and ( not isMake ) and ( not isInstall ):
 		Make(exclude)
-		Install(array)
+		Install()
 	else:
 		if isDownload == bool(1):
 			Download(array)
 		if isMake == bool(1):
 			Make(exclude)
 		if isInstall == bool(1):
-			Install(array)
-		
+			Install()
 	return 0
 	
 def init():
