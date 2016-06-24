@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+
+"""
+
+"""
 import argparse
 import sys
 import re
@@ -13,23 +17,29 @@ __pwd=""
 _exclude=[]
 
 def HandlerArgs():
-	parser = argparse.ArgumentParser(description="The prog for assembly libs", add_help = False, usage = '%(prog)s [options]' )
+	parser = argparse.ArgumentParser(description="The prog for \
+	assembly libs", add_help = False, usage = '%(prog)s [options]' )
 	array=copy.copy(__arraylibs)
 	array.append("all")
-	parser.add_argument( "libs", nargs="*", choices=array, default="all", help="list of libs" )
-	parser.add_argument( "-d", "--download", action='store_true', help="download libs" )
-	parser.add_argument( "-i", "--install", action='store_true', help="install libs" )
-	parser.add_argument( "-m", "--make", action='store_true', help="build libs" )
-	parser.add_argument( "-e", "--exception", nargs="+", help="exception libs" )
-	parser.add_argument( "-h", "--help", action="help", help="usage" )
+	parser.add_argument( "libs", nargs = "*", choices = array, 
+		default = "all", help="list of libs" )
+	parser.add_argument( "-d", "--download", 
+		action = 'store_true', help="download libs" )
+	parser.add_argument( "-i", "--install", 
+		action = 'store_true', help="install libs" )
+	parser.add_argument( "-m", "--make", 
+		action = 'store_true', help="build libs" )
+	parser.add_argument( "-e", "--exception", nargs = "+", 
+		help="exception libs" )
+	parser.add_argument( "-h", "--help", action = "help", help = "usage" )
 	
 	if len(sys.argv) <= 1:
-		options= argparse.Namespace()
-		options.libs="all"
-		options.download=bool(0)
-		options.install=bool(1)
-		options.make=bool(1)
-		options.exception=[]
+		options = argparse.Namespace()
+		options.libs = "all"
+		options.download = bool(0)
+		options.install = bool(1)
+		options.make = bool(1)
+		options.exception = []
 	else: 
 		options = parser.parse_args()
 	return options
@@ -50,8 +60,8 @@ def parsLibs(nameFile,array):
 	else:
 		with dfile:
 			for line in iter(dfile):
-				p=re.compile('\s*function\s+download_([\w-]+)')
-				match=p.match(line)
+				p = re.compile('\s*function\s+download_([\w-]+)')
+				match = p.match(line)
 				if match:
 					array.append(match.group(1))
 			dfile.close()
@@ -71,45 +81,47 @@ def Download(libs):
 	#print ("DOWNLOAD: {}".format(libs))
 	print ("DOWNLOADING: ")
 	for lib in iter(libs):
-		subprocess.call("./scripts/download.sh {}".format(lib), shell=True)
-	
+		subprocess.call("./scripts/download.sh {}".format(lib), 
+			shell=True
+		)
+			
 def Install():
 	#print ("INSTALL: {}".format(libs))
 	print ("INSTALLING: ")
-	res=0
-	__pwd=os.path.dirname(os.path.abspath( __file__ ))
+	res = 0
+	__pwd = os.path.dirname(os.path.abspath( __file__ ))
 	os.chdir("{}/CBin".format(__pwd))
 	try:
 		subprocess.call("make install", shell=True)
-		res=1
+		res = 1
 	except NameError as ex:
 		print("error: can't call 'make install' ")
-		res=-1
+		res = -1
 	os.chdir("{}".format(__pwd))
 	return res
 		 
 def Make(excludes):
 	print ("MAKE: {}".format(excludes))
 	print ("MAKING: ")
-	res=0
-	__pwd=os.path.dirname(os.path.abspath( __file__ ))
+	res = 0
+	__pwd = os.path.dirname(os.path.abspath( __file__ ))
 	print ("MAKING: {}".format(__pwd))
 	try:
 		os.chdir("{}/CBin".format(__pwd))
 		subprocess.call("rm -rf ./*", shell=True)
 		subprocess.call("cmake {} ..".format(excludes), shell=True)
 		subprocess.call("make".format(excludes), shell=True)
-		res=1
+		res = 1
 	except NameError as ex:
 		print("error: can't call {}".format(ex.args))
-		res=-1
+		res = -1
 	os.chdir("{}".format(__pwd))
 	return 0
 
 def exceptlibs(libs,exps):			
 	array=[]
 	if libs == "all":
-		array=copy.copy(__arraylibs)
+		array = copy.copy(__arraylibs)
 		if exps:
 			for exlib in iter(exps):
 				for element in iter(array):
@@ -117,35 +129,37 @@ def exceptlibs(libs,exps):
 						array.remove(exlib)
 						break
 	else:
-		array=copy.copy(libs)
+		array = copy.copy(libs)
 		
 	return array
 	
 def excludelibs(libs,exps):
-	exclude=""
-	array=[]
+	exclude = ""
+	array = []
 	if libs == "all":
 		if exps:
 			for exlib in iter(exps):
-				exclude=" ".join("-DEXCLUDE_%s:BOOL=TRUE" % (stroka) for stroka in exps )
+				exclude=" ".join("-DEXCLUDE_%s:BOOL=TRUE" % 
+					(stroka) for stroka in exps )
 	else:
 		array=copy.copy(__arraylibs)
 		for lib in iter(libs):
 			for element in iter(array):
 				if lib == element:
 					array.remove(lib)
-		exclude="".join(" -DEXCLUDE_%s:BOOL=TRUE" % (stroka) for stroka in array )
+		exclude = "".join(" -DEXCLUDE_%s:BOOL=TRUE" % 
+			(stroka) for stroka in array )
 	return exclude
 	
 def HandlerOpts(options):
-	array=[]
-	libs=options.libs
-	isDownload=options.download
-	isMake=options.make
-	isInstall=options.install
-	exps=options.exception
-	array=exceptlibs(libs,exps)
-	exclude=excludelibs(libs,exps)
+	array = []
+	libs = options.libs
+	isDownload = options.download
+	isMake = options.make
+	isInstall = options.install
+	exps = options.exception
+	array = exceptlibs(libs,exps)
+	exclude = excludelibs(libs,exps)
 	
 	if (not isDownload) and ( not isMake ) and ( not isInstall ):
 		Make(exclude)
@@ -160,8 +174,8 @@ def HandlerOpts(options):
 	return 0
 	
 def init():
-	__pwd=os.path.dirname(os.path.abspath( __file__ ))
-	file_download="{}/scripts/download.sh".format(__pwd)
+	__pwd = os.path.dirname(os.path.abspath( __file__ ))
+	file_download = "{}/scripts/download.sh".format(__pwd)
 	res = parsLibs(file_download,__arraylibs)
 	if res == -1:
 		print("error: init")
@@ -172,7 +186,7 @@ if __name__ == "__main__":
 	for param in sys.argv:
 		print(param)
 	if init() == -1:
-		exit
+		exit	
 	options=HandlerArgs()
 	#PrintEcho(options)
 	HandlerOpts(options)
