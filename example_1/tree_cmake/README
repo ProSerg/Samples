@@ -1,0 +1,21 @@
+It is the small instruction for switching on of function of autocompletion of parameters.
+
+You need to execute the following command:
+  sudo cp - r of $ {this_project}/scripts/comp.sh/etc/bash_completion.d/
+
+Then you may restart system that changes will applied.
+ or to run the following command
+  . /etc/bash_completion.d/comp.sh
+  
+it assembles  all libraries  and installs all files
+./builder
+it downloads libraries
+./builder --download
+it assembles them only 
+./builder --make
+it installs  their files only
+. / builder --install
+it performs any operation over the list of libraries
+./builder libxml2 glew "& etc" - download - make - install 
+also it possibles to exclude a library
+./builder --exception Qt

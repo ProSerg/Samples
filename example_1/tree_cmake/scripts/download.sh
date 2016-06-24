@@ -11,6 +11,7 @@ colors
 libs=libs
 target=source
 root=`pwd`
+patchs=patchs
 #./clean.sh
 
 [ -d $target ] || mkdir -p $target
@@ -261,6 +262,7 @@ function download_ogre()
 		hg clone https://bitbucket.org/sinbad/ogre ./src
 		cd ./src
 		hg checkout v1-10
+		patch -p1 < $root/$patchs/ogre.patch
 		cd ..
 	fi
 	if ! [ -d deps ]; then
