@@ -7,31 +7,21 @@ import subprocess
 import copy
 import os 
 
-####
-# OTHER MODE
-####
 
-
-
-####
-
-####
 __arraylibs=[]
 __pwd=""
 _exclude=[]
-####
 
 def usage():
 	print("FIXME")
 
 def HandlerArgs():
-	
 	parser = argparse.ArgumentParser(description="The prog for assembly libs")
 	parser.add_argument("libs" ,nargs="+", default="all", help="list of libs")
-	parser.add_argument("--download" ,action='store_true', help="download libs")
-	parser.add_argument("--install" ,action='store_true', help="install libs")
-	parser.add_argument("--make" ,action='store_true', help="build libs")
-	parser.add_argument("--exception" ,nargs="+", help="exception libs")
+	parser.add_argument("-d","--download" ,action='store_true', help="download libs")
+	parser.add_argument("-i","--install" ,action='store_true', help="install libs")
+	parser.add_argument("-m","--make" ,action='store_true', help="build libs")
+	parser.add_argument("-e","--exception" ,nargs="+", help="exception libs")
 	if len(sys.argv) <= 1:
 		options= argparse.Namespace()
 		options.libs="all"
@@ -49,8 +39,7 @@ def PrintEcho(options):
 	print ("isMake: {}".format(options.make) )
 	print ("isInstall: {}".format(options.install) )
 	print ("Exception: {}".format(options.exception) )
-	
-# it needs for exseption "ALL" if there is another lib. 	
+		
 def parsLibs(nameFile,array):
 	try:
 		dfile = open(nameFile)
