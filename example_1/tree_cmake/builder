@@ -181,13 +181,14 @@ def init():
 		print("error: init")
 	return res
 	
-
-if __name__ == "__main__":
+def main():
 	for param in sys.argv:
 		print(param)
 	if init() == -1:
 		exit	
 	options=HandlerArgs()
-	#PrintEcho(options)
 	HandlerOpts(options)
 	
+
+if __name__ == "__main__":
+	main()
