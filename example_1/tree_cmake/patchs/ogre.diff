@@ -1,0 +1,12 @@
+diff -r b5029a79a2c3 Components/HLMS/include/OgreHlmsShaderCommon.h
+--- a/Components/HLMS/include/OgreHlmsShaderCommon.h	Wed Apr 13 14:18:55 2016 +0100
++++ b/Components/HLMS/include/OgreHlmsShaderCommon.h	Tue Jun 14 10:42:12 2016 -0500
+@@ -109,7 +109,7 @@
+         bool matchEqual( const char *stringCompare ) const
+         {
+             const char *origStr = mOriginal->c_str() + mStart;
+-            ptrdiff_t length = mEnd - mStart;
++            std::ptrdiff_t length = mEnd - mStart;
+             while( *origStr == *stringCompare && *origStr && --length )
+                 ++origStr, ++stringCompare;
+ 
