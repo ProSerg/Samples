@@ -19,3 +19,15 @@ it performs any operation over the list of libraries
 ./builder libxml2 glew "& etc" - download - make - install 
 also it possibles to exclude a library
 ./builder --exception Qt
+
+Qt libs needs to install at ./libs/Qt
+
+
+struct of the project
+
+scripts - It contains work scripts
+patchs - It contains work patch
+builder - it's main program
+
+
+
