@@ -1,4 +1,4 @@
-It is the small instruction for switching on of function of autocompletion of parameters.
+It is the small instruction for switching on an autocompletion of parameters.
 
 You need to execute the following command:
   sudo cp - r of $ {this_project}/scripts/comp.sh/etc/bash_completion.d/
