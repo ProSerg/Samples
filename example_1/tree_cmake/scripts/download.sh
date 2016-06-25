@@ -426,7 +426,7 @@ function download_fribidi()
 function download_Qt() 
 {
 	name=Qt
-    version=5.6
+    version=5.7
     download_msg "$name $version"
     mkdir -p $root/$target/$name
     cd $root/$target/$name
