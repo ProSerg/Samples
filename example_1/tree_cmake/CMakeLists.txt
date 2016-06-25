@@ -1218,14 +1218,36 @@ project( Qt )
 set(TARGET libQt5Core )
 set(Archive Qt.tar.gz )
 set(MAJOR 5)
-set(MINOR 6)
+set(MINOR 7)
 set(SUFFIX .so)
 set(QT Qt)
+ 
+  FILE(GLOB children RELATIVE ${LIBRARY_OUTPUT_PATH}/${QT}/ ${LIBRARY_OUTPUT_PATH}/${QT}/* )
+  SET(dirlist "")
+  FOREACH(child ${children})
+    IF(IS_DIRECTORY ${LIBRARY_OUTPUT_PATH}/${QT}/${child})
+		IF(${child} MATCHES "([0-9][.][0-9])")
+			LIST(APPEND dirlist ${child})
+		ENDIF()
+    ENDIF()
+  ENDFOREACH()
+  
+  set(HEAD "" )
+  list(GET dirlist 0 HEAD )
+  
+  FOREACH(child ${dirlist})
+	IF ( ${HEAD} LESS ${child} )
+		SET( HEAD "${child}" )
+	ENDIF()
+  ENDFOREACH()
+  
+SET ( QT_VERSION  "${HEAD}" )
+
 
 IF (NOT DEFINED EXCLUDE_${PROJECT_NAME})
 	message (STATUS "CMAKE ${PROJECT_NAME} " )
 	set(PROJECT_SOURCE_DIR "${PROJECT_DIRS}/${PROJECT_NAME}/src")
-	set(PROJECT_LIB_DIR "${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/${MAJOR}.${MINOR}/gcc_64/lib")
+	set(PROJECT_LIB_DIR "${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/${QT_VERSION}/gcc_64/lib")
 	set(PROJECT_LIB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/")
 
 	add_custom_target(${PROJECT_NAME} ALL 
@@ -1261,7 +1283,7 @@ IF (NOT DEFINED EXCLUDE_${PROJECT_NAME})
 		COMMENT "${PROJECT_NAME}"
 		)
 
-	set(ENV{QMAKESPEC} "${LIBRARY_OUTPUT_PATH}/${QT}/5.6/gcc_64/mkspecs/linux-g++")
+	set(ENV{QMAKESPEC} "${LIBRARY_OUTPUT_PATH}/${QT}/${QT_VERSION}/gcc_64/mkspecs/linux-g++")
 	set(ENV{PATH} "${LIBRARY_OUTPUT_PATH}/${QT}/bin")
 
 	ADD_CUSTOM_COMMAND(
@@ -1272,7 +1294,7 @@ IF (NOT DEFINED EXCLUDE_${PROJECT_NAME})
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib 
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include 
 		COMMAND ./configure -library
-		COMMAND ${CMAKE_COMMAND} -E env "PATH=${LIBRARY_OUTPUT_PATH}/${QT}/5.6/gcc_64/bin" qmake && make
+		COMMAND ${CMAKE_COMMAND} -E env "PATH=${LIBRARY_OUTPUT_PATH}/${QT}/${QT_VERSION}/gcc_64/bin" qmake && make
 		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} 
 	)
 
@@ -1319,16 +1341,12 @@ IF (NOT DEFINED EXCLUDE_${PROJECT_NAME})
 
 	ADD_CUSTOM_COMMAND(
 		OUTPUT  ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib/${TARGET}${SUFFIX}
-		#TARGET ${PROJECT_NAME}
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LICENSE_OUTPUT_PATH}/${PROJECT_NAME}
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME} 
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/bin 
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/lib 
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}/include 
-		#COMMAND mkdir -p ./build
-		#COMMAND ${CMAKE_COMMAND} -E env "PATH=PATH:${LIBRARY_OUTPUT_PATH}/${QT}/bin" qmake -query
-		#"QMAKESPEC=${LIBRARY_OUTPUT_PATH}/${QT}/5.6/gcc_64/mkspecs/linux-g++"
-		COMMAND ${CMAKE_COMMAND} -E env "PATH=${LIBRARY_OUTPUT_PATH}/${QT}/5.6/gcc_64/bin" qmake qwt.pro
+		COMMAND ${CMAKE_COMMAND} -E env "PATH=${LIBRARY_OUTPUT_PATH}/${QT}/${QT_VERSION}/gcc_64/bin" qmake qwt.pro
 		COMMAND make
 		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} 
 	)
@@ -1356,11 +1374,6 @@ IF (NOT DEFINED EXCLUDE_${PROJECT_NAME})
 
 ENDIF(NOT DEFINED EXCLUDE_${PROJECT_NAME} )
 
-#FOREACH(dir ${SUBDIRS})
-#	file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/${TARGET} )
-#	message( STATUS "BUILD: " ${CMAKE_SOURCE_DIR}/source/${dir}  )
-#	add_subdirectory( ${CMAKE_SOURCE_DIR}/${CMAKE}/${dir}  ${CMAKE_SOURCE_DIR}/${CMAKE}/${dir}/build )
-#ENDFOREACH()
 
 
 
