@@ -20,7 +20,7 @@ it performs any operation over the list of libraries
 also it possibles to exclude a library
 ./builder --exception Qt
 
-WARNING!!! Qt libs needs to install at ./libs/Qt
+WARNING!!!  You needs to install Qt libs at ./libs/Qt
 
 struct of the project
 
