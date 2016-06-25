@@ -20,12 +20,13 @@ it performs any operation over the list of libraries
 also it possibles to exclude a library
 ./builder --exception Qt
 
-Qt libs needs to install at ./libs/Qt
-
+WARNING!!! Qt libs needs to install at ./libs/Qt
 
 struct of the project
 
 scripts - It contains work scripts
+  downlaod.sh the script is very important. You must follow the version of the library.
+   you need to add the installation of patches in this script.
 patchs - It contains work patch
 builder - it's main program
 
